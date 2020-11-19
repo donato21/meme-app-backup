@@ -4,15 +4,20 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.view.Menu;
+import android.view.ViewGroup;
+import android.widget.FrameLayout;
 
-import com.cs3326.projectmeme.ui.auth.AuthFragment;
+import com.cs3326.projectmeme.ui.login.LoginFragment;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.snackbar.Snackbar;
 import com.google.android.material.navigation.NavigationView;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 
-import androidx.fragment.app.Fragment;
+import androidx.constraintlayout.widget.ConstraintLayout;
+import androidx.fragment.app.FragmentTransaction;
+import androidx.lifecycle.ViewModelStore;
+import androidx.navigation.NavBackStackEntry;
 import androidx.navigation.NavController;
 import androidx.navigation.Navigation;
 import androidx.navigation.ui.AppBarConfiguration;
@@ -20,7 +25,6 @@ import androidx.navigation.ui.NavigationUI;
 import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
-import com.cs3326.projectmeme.ui.auth.*;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -60,6 +64,11 @@ public class MainActivity extends AppCompatActivity {
         NavigationUI.setupActionBarWithNavController(this, navController, mAppBarConfiguration);
         NavigationUI.setupWithNavController(navigationView, navController);
 
+//        ViewModelStore myViewModelStore = navController.getCurrentBackStackEntry();
+//        myViewModelStore.getLiveData().observe(backStackEntry, myData -> {
+//            // react to live data update
+//        });
+
         mAuth = FirebaseAuth.getInstance();
     }
 
@@ -96,7 +105,13 @@ public class MainActivity extends AppCompatActivity {
     }
 
     public void login(View view) {
-        Intent i = new Intent(MainActivity.this, LoginActivity.class);
-        startActivity(i);
+//        Intent i = new Intent(MainActivity.this, LoginActivity.class);
+//        startActivity(i);
+        FrameLayout contentView = (FrameLayout) findViewById(R.id.nav_host_fragment);
+        getSupportFragmentManager().beginTransaction()
+                .replace(contentView.getId(), new LoginFragment())
+                .addToBackStack(null)
+                .commit();
+        System.out.println("Did the fragment thing .-.");
     }
 }
