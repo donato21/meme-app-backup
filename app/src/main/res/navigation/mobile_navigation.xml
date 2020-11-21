@@ -9,22 +9,20 @@
         android:id="@+id/nav_home"
         android:name="com.cs3326.projectmeme.ui.home.HomeFragment"
         android:label="@string/menu_home"
-        tools:layout="@layout/fragment_home" />
+        tools:layout="@layout/fragment_home" >
+        <action
+            android:id="@+id/action_nav_home_to_nav_animation"
+            app:destination="@id/nav_animation" />
+        <action
+            android:id="@+id/action_nav_home_to_nav_animation2"
+            app:destination="@id/nav_animation"
+            app:enterAnim="@anim/fragment_fade_enter"
+            app:exitAnim="@anim/fragment_fade_exit" />
+    </fragment>
 
-    <fragment
-        android:id="@+id/nav_gallery"
-        android:name="com.cs3326.projectmeme.ui.gallery.GalleryFragment"
-        android:label="@string/menu_gallery"
-        tools:layout="@layout/fragment_gallery" />
-
-    <fragment
-        android:id="@+id/nav_slideshow"
-        android:name="com.cs3326.projectmeme.ui.slideshow.SlideshowFragment"
-        android:label="@string/menu_slideshow"
-        tools:layout="@layout/fragment_slideshow" />
-    <fragment
-        android:id="@+id/nav_auth"
-        android:name="com.cs3326.projectmeme.ui.auth.AuthFragment"
-        android:label="@string/menu_auth"
-        tools:layout="@layout/auth_fragment" />
+    <activity
+        android:id="@+id/nav_animation"
+        android:name="com.cs3326.projectmeme.AnimationActivity"
+        android:label="activity_animation"
+        tools:layout="@layout/activity_animation" />
 </navigation>
