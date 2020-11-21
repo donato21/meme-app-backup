@@ -1,5 +1,6 @@
 package com.cs3326.projectmeme;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.os.Bundle;
@@ -11,6 +12,9 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
 
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
+import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 
@@ -37,12 +41,16 @@ public class Login extends AppCompatActivity {
         loginButton = (Button) findViewById(R.id.buttonLogin);
         registerButton = (Button) findViewById(R.id.buttonRegister);
 
+        // Disable input while checking auth state
+        setLoginEditable(false);
+
         // init firebase auth
         mAuth = FirebaseAuth.getInstance();
         currentUser = mAuth.getCurrentUser();
 
         // check authentication state
         if(mAuth.getCurrentUser() == null){
+            setLoginEditable(true);
             Log.d("LoginActivity", "No user is signed in");
 
             // TODO: Remove optional toast
@@ -52,7 +60,7 @@ public class Login extends AppCompatActivity {
         {
             Log.d("LoginActivity", "User is signed in: " + currentUser.getEmail().toString());
 
-            Toast.makeText(getApplicationContext(), "Already signed in", Toast.LENGTH_LONG).show();
+            Toast.makeText(Login.this, "Authentication successful.", Toast.LENGTH_SHORT).show();
             // TODO: Redirect to timeline
 
         }
@@ -61,9 +69,13 @@ public class Login extends AppCompatActivity {
     public void onLoginClick(View view){
         setLoginEditable(false);
 
+        // Collect Text
+        String email = emailEditText.getText().toString();
+        String password = passwordEditText.getText().toString();
+
         // Email regex tester
         Pattern emailRegex = Pattern.compile("^[a-zA-Z0-9!#$%&'*+/=?^_`{|}~-]+(?:\\.[a-zA-Z0-9!#$%&'*+/=?^_`{|}~-]+)*@(?:[a-zA-Z0-9](?:[a-zA-Z0-9-]*[a-zA-Z0-9])?\\.)+(?:[a-zA-Z]{2}|aero|asia|biz|cat|com|coop|edu|gov|info|int|jobs|mil|mobi|museum|name|net|org|pro|tel|travel)$");
-        Matcher mEmail = emailRegex.matcher(emailEditText.getText().toString());
+        Matcher mEmail = emailRegex.matcher(email);
 
         // Password regex testing is extra, but can save on api calls. Let the client deal with the extra computation requirements :^)
         /*
@@ -75,16 +87,32 @@ public class Login extends AppCompatActivity {
             Minimum eight in length .{8,} (with the anchors)
          */
         Pattern passwordRegex = Pattern.compile("^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9])(?=.*?[#?!@$%^&*-]).{8,}$");
-        Matcher mPassword = passwordRegex.matcher(passwordEditText.getText().toString());
+        Matcher mPassword = passwordRegex.matcher(password);
 
         Log.d("LoginActivity", "Email Pattern " + mEmail.matches());
         Log.d("LoginActivity", "Password Pattern " + mPassword.matches());
 
         if (mEmail.matches() && mPassword.matches()){
-            Toast.makeText(getApplicationContext(), "valid", Toast.LENGTH_SHORT).show();
             setLoginEditable(false);
 
-            //TODO: Redirect to Timeline
+            mAuth.signInWithEmailAndPassword(email, password)
+                    .addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
+                        @Override
+                        public void onComplete(@NonNull Task<AuthResult> task) {
+                            if (task.isSuccessful()) {
+                                // Sign in success, update UI with the signed-in user's information
+                                Log.d("LoginActivity", "signInWithEmail:success");
+                                Toast.makeText(Login.this, "Authentication successful.", Toast.LENGTH_SHORT).show();
+
+                                //TODO: Redirect To Login
+                            } else {
+                                Log.w("LoginActivity", "signInWithEmail:failure", task.getException());
+                                Toast.makeText(Login.this, "Authentication failed.", Toast.LENGTH_SHORT).show();
+                                passwordEditText.setText("");
+                                setLoginEditable(true);
+                            }
+                        }
+                    });
         }
         else{
             Toast.makeText(getApplicationContext(), "Invalid email or password", Toast.LENGTH_SHORT).show();
