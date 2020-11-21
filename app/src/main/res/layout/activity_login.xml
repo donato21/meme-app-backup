@@ -10,8 +10,8 @@
     <ImageView
         android:id="@+id/imageView3"
         android:layout_width="0dp"
-        android:layout_height="175dp"
-        android:layout_marginTop="75dp"
+        android:layout_height="100dp"
+        android:layout_marginTop="50dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
@@ -32,7 +32,7 @@
         app:layout_constraintTop_toBottomOf="@+id/imageView3" />
 
     <EditText
-        android:id="@+id/editTextTextEmailAddress"
+        android:id="@+id/editTextEmailAddress"
         android:layout_width="0dp"
         android:layout_height="41dp"
         android:layout_marginStart="50dp"
@@ -42,36 +42,38 @@
         android:ems="10"
         android:hint="Email"
         android:inputType="textEmailAddress"
-        android:shadowColor="#F3F3F3"
+        android:shadowColor="#5C5F77"
         android:textColor="#FFFFFF"
         android:textColorHint="#5C5F77"
-        app:layout_constraintBottom_toTopOf="@+id/editTextTextPassword"
+        app:layout_constraintBottom_toTopOf="@+id/editTextPassword"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent" />
 
     <Button
-        android:id="@+id/button"
+        android:id="@+id/buttonLogin"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="50dp"
         android:layout_marginEnd="50dp"
         android:layout_marginBottom="5dp"
         android:backgroundTint="#D82E00"
+        android:onClick="onLoginClick"
         android:text="Login"
         android:textColor="#FFFFFF"
-        app:layout_constraintBottom_toTopOf="@+id/button2"
+        app:layout_constraintBottom_toTopOf="@+id/buttonRegister"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent" />
 
     <Button
-        android:id="@+id/button2"
+        android:id="@+id/buttonRegister"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="50dp"
         android:layout_marginEnd="50dp"
         android:layout_marginBottom="50dp"
         android:backgroundTint="#EDEDED"
+        android:onClick="onRegisterClick"
         android:text="Register"
         android:textColor="#D82E00"
         app:layout_constraintBottom_toBottomOf="parent"
@@ -80,7 +82,7 @@
         app:layout_constraintStart_toStartOf="parent" />
 
     <EditText
-        android:id="@+id/editTextTextPassword"
+        android:id="@+id/editTextPassword"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="50dp"
@@ -90,9 +92,10 @@
         android:ems="10"
         android:hint="Password"
         android:inputType="textPassword"
+        android:shadowColor="#5C5F77"
         android:textColor="#FFFFFF"
         android:textColorHint="#5C5F77"
-        app:layout_constraintBottom_toTopOf="@+id/button"
+        app:layout_constraintBottom_toTopOf="@+id/buttonLogin"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="1.0"
         app:layout_constraintStart_toStartOf="parent" />
