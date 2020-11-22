@@ -112,7 +112,7 @@ public class RegistrationActivity extends AppCompatActivity {
                                                 Log.d("RegistrationActivity", "User profile updated.");
                                             }
 
-                                            Intent intent = new Intent(RegistrationActivity.this, AuthenticatedRouteExample.class);
+                                            Intent intent = new Intent(RegistrationActivity.this, AppActivity.class);
                                             startActivity(intent);
                                             return;
                                         }

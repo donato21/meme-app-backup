@@ -63,7 +63,7 @@ public class Login extends AppCompatActivity {
             Toast.makeText(Login.this, "Authentication successful.", Toast.LENGTH_SHORT).show();
 
             // TODO: Redirect to timeline
-            Intent intent = new Intent(Login.this, AuthenticatedRouteExample.class);
+            Intent intent = new Intent(Login.this, AppActivity.class);
             startActivity(intent);
             return;
 
@@ -111,7 +111,7 @@ public class Login extends AppCompatActivity {
                                 Log.d("LoginActivity", "signInWithEmail:success");
                                 Toast.makeText(Login.this, "Authentication successful.", Toast.LENGTH_SHORT).show();
 
-                                Intent intent = new Intent(Login.this, AuthenticatedRouteExample.class);
+                                Intent intent = new Intent(Login.this, AppActivity.class);
                                 startActivity(intent);
                                 return;
 
