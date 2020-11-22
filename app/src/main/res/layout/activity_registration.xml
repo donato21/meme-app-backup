@@ -1,0 +1,138 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="#212130"
+    tools:context=".RegistrationActivity">
+
+    <ScrollView
+        android:id="@+id/scrollView2"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_marginBottom="50dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        tools:layout_editor_absoluteX="0dp">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+
+            <TextView
+                android:id="@+id/textView2"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="30dp"
+                android:background="#D82E00"
+                android:fontFamily="sans-serif-black"
+                android:paddingLeft="30dp"
+                android:paddingTop="15dp"
+                android:paddingEnd="20dp"
+                android:paddingRight="15dp"
+                android:paddingBottom="15dp"
+                android:text="Registration"
+                android:textAppearance="@style/TextAppearance.AppCompat.Large"
+                android:textColor="#FFFFFF"
+                android:textSize="30sp" />
+
+            <EditText
+                android:id="@+id/editTexPersonName"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="25sp"
+                android:layout_marginTop="30dp"
+                android:layout_marginRight="25sp"
+                android:backgroundTint="#2B2D3F"
+                android:ems="10"
+                android:foregroundTint="#673AB7"
+                android:hint="Display Name"
+                android:inputType="textPersonName"
+                android:textColor="#FFFFFF"
+                android:textColorHighlight="#D82E00"
+                android:textColorHint="#5C5F77"
+                android:textColorLink="#D82E00" />
+
+            <TextView
+                android:id="@+id/textView4"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="25sp"
+                android:layout_marginTop="5sp"
+                android:layout_marginRight="25sp"
+                android:text="  - Only use letters, numbers, underscores and dashes\n  - Minimum three in length\n  - Maximum sixteen in length"
+                android:textColor="#5C5F77"
+                android:textColorHint="#FFFFFF" />
+
+            <EditText
+                android:id="@+id/editTextEmail"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="25sp"
+                android:layout_marginTop="15sp"
+                android:layout_marginRight="25sp"
+                android:backgroundTint="#2B2D3F"
+                android:ems="10"
+                android:hint="Email"
+                android:inputType="textPersonName"
+                android:textColor="#FFFFFF"
+                android:textColorHint="#5C5F77" />
+
+            <EditText
+                android:id="@+id/editTextPassword"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="25sp"
+                android:layout_marginTop="15sp"
+                android:layout_marginRight="25sp"
+                android:backgroundTint="#2B2D3F"
+                android:ems="10"
+                android:hint="Password"
+                android:inputType="textPersonName"
+                android:textColor="#FFFFFF"
+                android:textColorHint="#5C5F77" />
+
+            <TextView
+                android:id="@+id/textView3"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="25sp"
+                android:layout_marginTop="5sp"
+                android:layout_marginRight="25sp"
+                android:text=" - At least one lower case English letter\n  - At least one digit\n  - At least one special character\n  - Minimum eight in length"
+                android:textColor="#5C5F77"
+                android:textColorHint="#FFFFFF" />
+
+            <EditText
+                android:id="@+id/editTextPasswordConfirm"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="25sp"
+                android:layout_marginTop="15sp"
+                android:layout_marginRight="25sp"
+                android:backgroundTint="#2B2D3F"
+                android:ems="10"
+                android:hint="Confirm Password"
+                android:inputType="textPersonName"
+                android:textColor="#FFFFFF"
+                android:textColorHint="#5C5F77" />
+
+        </LinearLayout>
+    </ScrollView>
+
+    <Button
+        android:id="@+id/buttonRegister"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="25dp"
+        android:layout_marginEnd="25dp"
+        android:layout_marginBottom="10dp"
+        android:backgroundTint="#D82E00"
+        android:text="Register"
+        android:textColor="#FFFFFF"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>

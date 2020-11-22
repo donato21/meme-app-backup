@@ -3,6 +3,7 @@ package com.cs3326.projectmeme;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.text.InputType;
 import android.text.method.PasswordTransformationMethod;
@@ -38,7 +39,7 @@ public class Login extends AppCompatActivity {
         // init components
         emailEditText = (EditText) findViewById(R.id.editTextEmailAddress);
         passwordEditText = (EditText) findViewById(R.id.editTextPassword);
-        loginButton = (Button) findViewById(R.id.buttonLogin);
+        loginButton = (Button) findViewById(R.id.buttonRegister);
         registerButton = (Button) findViewById(R.id.buttonRegister);
 
         // Disable input while checking auth state
@@ -59,10 +60,13 @@ public class Login extends AppCompatActivity {
         else
         {
             Log.d("LoginActivity", "User is signed in: " + currentUser.getEmail().toString());
-
             Toast.makeText(Login.this, "Authentication successful.", Toast.LENGTH_SHORT).show();
+
             // TODO: Redirect to timeline
 
+
+            // TODO: Remove Temporary enable
+            setLoginEditable(true);
         }
     }
 
@@ -92,15 +96,16 @@ public class Login extends AppCompatActivity {
         Log.d("LoginActivity", "Email Pattern " + mEmail.matches());
         Log.d("LoginActivity", "Password Pattern " + mPassword.matches());
 
+        // Checks pattern matching
         if (mEmail.matches() && mPassword.matches()){
             setLoginEditable(false);
 
+            //patterns match, attempt to login to firebase
             mAuth.signInWithEmailAndPassword(email, password)
                     .addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
                         @Override
                         public void onComplete(@NonNull Task<AuthResult> task) {
                             if (task.isSuccessful()) {
-                                // Sign in success, update UI with the signed-in user's information
                                 Log.d("LoginActivity", "signInWithEmail:success");
                                 Toast.makeText(Login.this, "Authentication successful.", Toast.LENGTH_SHORT).show();
 
@@ -141,6 +146,7 @@ public class Login extends AppCompatActivity {
     }
 
     public void onRegisterClick(View view){
-        //TODO: Redirect to registration
+        Intent intent = new Intent(this, RegistrationActivity.class);
+        startActivity(intent);
     }
 }
