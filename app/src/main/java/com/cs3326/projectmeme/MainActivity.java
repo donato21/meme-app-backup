@@ -20,6 +20,13 @@ public class MainActivity extends AppCompatActivity {
                 changeToSplashActivity();
             }
         }, 1000); // Millisecond 1000 = 1 sec
+        new Handler(Looper.getMainLooper()).postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                // Magic Here
+                finish();
+            }
+        }, 1000); // Millisecond 1000 = 1 sec
     }
 
     public void changeToSplashActivity() {
