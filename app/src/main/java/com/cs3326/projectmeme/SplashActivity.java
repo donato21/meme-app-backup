@@ -1,23 +1,24 @@
 package com.cs3326.projectmeme;
 
+import androidx.appcompat.app.AppCompatActivity;
+
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
 
-import androidx.appcompat.app.AppCompatActivity;
+public class SplashActivity extends AppCompatActivity {
 
-public class MainActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
+        setContentView(R.layout.activity_splash);
 
         new Handler(Looper.getMainLooper()).postDelayed(new Runnable() {
             @Override
             public void run() {
                 // Magic Here
-                changeToSplashActivity();
+                changeToLoginActivity();
             }
         }, 1000); // Millisecond 1000 = 1 sec
         new Handler(Looper.getMainLooper()).postDelayed(new Runnable() {
@@ -29,8 +30,8 @@ public class MainActivity extends AppCompatActivity {
         }, 1000); // Millisecond 1000 = 1 sec
     }
 
-    public void changeToSplashActivity() {
-        Intent i = new Intent(this, SplashActivity.class);
+    public void changeToLoginActivity() {
+        Intent i = new Intent(this, Login.class);//Changed temp to test AppActivity
         startActivity(i);
     }
 }
