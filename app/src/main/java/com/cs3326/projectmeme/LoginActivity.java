@@ -110,8 +110,7 @@ public class LoginActivity extends AppCompatActivity {
                             if (task.isSuccessful()) {
                                 Log.d("LoginActivity", "signInWithEmail:success");
                                 Toast.makeText(LoginActivity.this, "Authentication successful.", Toast.LENGTH_SHORT).show();
-
-                                Intent intent = new Intent(LoginActivity.this, AuthenticatedRouteActivity.class);
+                                Intent intent = new Intent(LoginActivity.this, AppActivity.class);
                                 startActivity(intent);
                                 return;
 

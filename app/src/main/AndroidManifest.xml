@@ -13,6 +13,8 @@
         <activity android:name=".LoginActivity" android:theme="@style/Theme.AppCompat.Light.NoActionBar"/>
         <activity android:name=".RegistrationActivity" android:theme="@style/Theme.AppCompat.Light.NoActionBar"/>
         <activity android:name=".AuthenticatedRouteActivity" android:theme="@style/Theme.AppCompat.Light.NoActionBar"/>
+
+>>>>>>> 20b164dbd40d7976876d9543055e52b67b03e03d
         <activity android:name=".SplashActivity" android:theme="@style/Theme.AppCompat.Light.NoActionBar"/>
         <activity
             android:name=".MainActivity"

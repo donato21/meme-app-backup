@@ -117,7 +117,7 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="15dp"
         android:onClick="onRegisterClick"
-        android:text="@string/login_registration_link"
+        android:text="@string/login_registration_text"
         android:textColor="#FFFFFF"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.497"
