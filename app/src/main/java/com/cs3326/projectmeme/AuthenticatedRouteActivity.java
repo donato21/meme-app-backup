@@ -10,9 +10,7 @@ import android.widget.TextView;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 
-import org.w3c.dom.Text;
-
-public class AuthenticatedRouteExample extends AppCompatActivity {
+public class AuthenticatedRouteActivity extends AppCompatActivity {
 
     private FirebaseAuth mAuth;
     private FirebaseUser currentUser;
@@ -30,7 +28,7 @@ public class AuthenticatedRouteExample extends AppCompatActivity {
         currentUser = mAuth.getCurrentUser();
 
         if (currentUser == null){
-            Intent intent = new Intent(this, Login.class);
+            Intent intent = new Intent(this, LoginActivity.class);
             startActivity(intent);
             return;
         }
@@ -42,7 +40,7 @@ public class AuthenticatedRouteExample extends AppCompatActivity {
 
     public void onSignOutClick(View view){
         mAuth.signOut();
-        Intent intent = new Intent(this, Login.class);
+        Intent intent = new Intent(this, LoginActivity.class);
         startActivity(intent);
     }
 }
