@@ -63,7 +63,7 @@ public class LoginActivity extends AppCompatActivity {
             Toast.makeText(LoginActivity.this, "Authentication successful.", Toast.LENGTH_SHORT).show();
 
             // TODO: Redirect to timeline
-            Intent intent = new Intent(LoginActivity.this, AuthenticatedRouteActivity.class);
+            Intent intent = new Intent(LoginActivity.this, AppActivity.class);
             startActivity(intent);
             return;
 
