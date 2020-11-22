@@ -54,7 +54,6 @@ public abstract class FirestoreAdapter<VH extends RecyclerView.ViewHolder>
     }
 
     public void startListening() {
-        // TODO(developer): Implement
         if (mQuery != null && mRegistration == null) {
             mRegistration = mQuery.addSnapshotListener(this);
         }
@@ -88,7 +87,6 @@ public abstract class FirestoreAdapter<VH extends RecyclerView.ViewHolder>
         return mSnapshots.size();
     }
 
-    // TODO(ME): Implement EventListener
     @Override
     public void onEvent(QuerySnapshot documentSnapshots,
                         FirebaseFirestoreException e){
@@ -105,13 +103,13 @@ public abstract class FirestoreAdapter<VH extends RecyclerView.ViewHolder>
 
             switch (change.getType()) {
                 case ADDED:
-                    onDocumentAdded(change);// TODO: handle document added
+                    onDocumentAdded(change);// handle document added
                     break;
                 case MODIFIED:
-                    onDocumentModified(change);// TODO: handle document modified
+                    onDocumentModified(change);// handle document modified
                     break;
                 case REMOVED:
-                    onDocumentRemoved(change);// TODO: handle document removed
+                    onDocumentRemoved(change);// handle document removed
                     break;
             }
         }
@@ -120,13 +118,11 @@ public abstract class FirestoreAdapter<VH extends RecyclerView.ViewHolder>
 
     }
 
-    // TODO: onDocumentAdded
     protected void onDocumentAdded(DocumentChange change) {
         mSnapshots.add(change.getNewIndex(),change.getDocument());
         notifyItemInserted(change.getNewIndex());
     }
 
-    // TODO: onDocumentModified
     protected void onDocumentModified(DocumentChange change) {
         if (change.getOldIndex() == change.getNewIndex()) {
             // Item changed but remained in same position
@@ -140,7 +136,6 @@ public abstract class FirestoreAdapter<VH extends RecyclerView.ViewHolder>
         }
     }
 
-    // TODO: onDocumentRemoved
     protected void onDocumentRemoved(DocumentChange change) {
         mSnapshots.remove(change.getOldIndex());
         notifyItemRemoved(change.getOldIndex());
