@@ -5,6 +5,8 @@ import androidx.appcompat.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
+import android.widget.TextView;
 
 public class AppActivity extends AppCompatActivity {
     Menu menu;
@@ -19,22 +21,29 @@ public class AppActivity extends AppCompatActivity {
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
         this.menu = menu;
-        getMenuInflater().inflate(R.menu.timeline_actionbar, menu);
+        getMenuInflater().inflate(R.menu.actionbar, menu);
         return true;
     }
 
     public void changeToProfileFragment(MenuItem mi) {
         //TODO: Change fragment code here
-        System.out.println("Menu Profile Icon Clicked! ");
-        // Inflate the menu; this adds items to the action bar if it is present.
-        getMenuInflater().inflate(R.menu.profile_actionbar, menu);
+        System.out.println("Changed to profile! ");
+        if (menu.findItem(R.id.miProfile).isVisible()) {
+            menu.findItem(R.id.miProfile).setVisible(false);
+        }
         setTitle("Profile");
+        TextView tv = (TextView) findViewById(R.id.textView_1);
+        tv.setText("Profile");
     }
 
-    public void changeToTimelineFragment() {
+    public void changeToTimelineFragment(View view) {
         //TODO: Change fragment code here
-        // Inflate the menu; this adds items to the action bar if it is present.
+        System.out.println("Changed to timeline!");
+        if (!menu.findItem(R.id.miProfile).isVisible()) {
+            menu.findItem(R.id.miProfile).setVisible(true);
+        }
+        TextView tv = (TextView) findViewById(R.id.textView_1);
+        tv.setText("Timeline");
         setTitle("Explore");
-        getMenuInflater().inflate(R.menu.timeline_actionbar, menu);
     }
 }
