@@ -63,10 +63,12 @@ public class Login extends AppCompatActivity {
             Toast.makeText(Login.this, "Authentication successful.", Toast.LENGTH_SHORT).show();
 
             // TODO: Redirect to timeline
+            Intent intent = new Intent(Login.this, AuthenticatedRouteExample.class);
+            startActivity(intent);
+            return;
 
-
-            // TODO: Remove Temporary enable
-            setLoginEditable(true);
+//            // TODO: Remove Temporary enable
+//            setLoginEditable(true);
         }
     }
 
@@ -109,7 +111,10 @@ public class Login extends AppCompatActivity {
                                 Log.d("LoginActivity", "signInWithEmail:success");
                                 Toast.makeText(Login.this, "Authentication successful.", Toast.LENGTH_SHORT).show();
 
-                                //TODO: Redirect To Login
+                                Intent intent = new Intent(Login.this, AuthenticatedRouteExample.class);
+                                startActivity(intent);
+                                return;
+
                             } else {
                                 Log.w("LoginActivity", "signInWithEmail:failure", task.getException());
                                 Toast.makeText(Login.this, "Authentication failed.", Toast.LENGTH_SHORT).show();
