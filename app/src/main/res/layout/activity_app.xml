@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="#212130"
+    android:background="#5C5F77"
     tools:context=".AppActivity">
 
     <fragment
@@ -12,6 +12,7 @@
         android:name="com.cs3326.projectmeme.app.TimelineFragment"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        tools:layout_editor_absoluteX="361dp"
-        tools:layout_editor_absoluteY="262dp" />
+        tools:layout_editor_absoluteX="140dp"
+        tools:layout_editor_absoluteY="278dp" />
+
 </androidx.constraintlayout.widget.ConstraintLayout>
