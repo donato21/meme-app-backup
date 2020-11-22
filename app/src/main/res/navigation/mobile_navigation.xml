@@ -3,26 +3,15 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/mobile_navigation"
-    app:startDestination="@+id/nav_home">
-
-    <fragment
-        android:id="@+id/nav_home"
-        android:name="com.cs3326.projectmeme.ui.home.HomeFragment"
-        android:label="@string/menu_home"
-        tools:layout="@layout/fragment_home" >
-        <action
-            android:id="@+id/action_nav_home_to_nav_animation"
-            app:destination="@id/nav_animation" />
-        <action
-            android:id="@+id/action_nav_home_to_nav_animation2"
-            app:destination="@id/nav_animation"
-            app:enterAnim="@anim/fragment_fade_enter"
-            app:exitAnim="@anim/fragment_fade_exit" />
-    </fragment>
+    app:startDestination="@id/mainActivity">
 
     <activity
-        android:id="@+id/nav_animation"
-        android:name="com.cs3326.projectmeme.AnimationActivity"
-        android:label="activity_animation"
-        tools:layout="@layout/activity_animation" />
+        android:id="@+id/nav_splash"
+        android:name="com.cs3326.projectmeme.SplashActivity"
+        android:label="activity_splash"
+        tools:layout="@layout/activity_splash" />
+    <activity
+        android:id="@+id/mainActivity"
+        android:name="com.cs3326.projectmeme.MainActivity"
+        android:label="MainActivity" />
 </navigation>
