@@ -18,7 +18,6 @@ import com.cs3326.projectmeme.R;
 public class TimelineFragment extends Fragment {
 
     private TimelineViewModel mViewModel;
-
     public static TimelineFragment newInstance() {
         return new TimelineFragment();
     }
@@ -26,7 +25,6 @@ public class TimelineFragment extends Fragment {
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container,
                              @Nullable Bundle savedInstanceState) {
-
         return inflater.inflate(R.layout.timeline_fragment, container, false);
     }
 
