@@ -19,7 +19,7 @@ public class AuthenticatedRouteActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_authenticated_route_example);
+        setContentView(R.layout.profile_fragment);
 
         displayNameTextView = (TextView) findViewById(R.id.textViewDisplayName);
         emailTextView = (TextView) findViewById(R.id.textViewEmail);

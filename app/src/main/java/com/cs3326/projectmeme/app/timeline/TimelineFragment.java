@@ -1,4 +1,4 @@
-package com.cs3326.projectmeme.app;
+package com.cs3326.projectmeme.app.timeline;
 
 import androidx.lifecycle.ViewModelProviders;
 
@@ -25,6 +25,7 @@ public class TimelineFragment extends Fragment {
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container,
                              @Nullable Bundle savedInstanceState) {
+
         return inflater.inflate(R.layout.timeline_fragment, container, false);
     }
 

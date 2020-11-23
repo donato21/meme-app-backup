@@ -1,4 +1,4 @@
-package com.cs3326.projectmeme.app;
+package com.cs3326.projectmeme.app.timeline;
 
 import androidx.lifecycle.ViewModel;
 
