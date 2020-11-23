@@ -12,6 +12,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import com.cs3326.projectmeme.AppActivity;
 import com.cs3326.projectmeme.R;
 
 public class TimelineFragment extends Fragment {
@@ -27,6 +28,12 @@ public class TimelineFragment extends Fragment {
                              @Nullable Bundle savedInstanceState) {
 
         return inflater.inflate(R.layout.timeline_fragment, container, false);
+    }
+
+    @Override
+    public void onStart() {
+        super.onStart();
+        ((AppActivity)getActivity()).updateTimelineUI();
     }
 
     @Override
