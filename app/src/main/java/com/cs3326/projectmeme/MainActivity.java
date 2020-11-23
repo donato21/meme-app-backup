@@ -1,27 +1,27 @@
 package com.cs3326.projectmeme;
 
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
-import android.util.Log;
-import android.view.ViewGroup;
+import android.preference.PreferenceManager;
 
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.recyclerview.widget.LinearLayoutManager;
-import androidx.recyclerview.widget.RecyclerView;
-
-import com.cs3326.projectmeme.adapter.PostAdapter;
-import com.google.android.material.snackbar.Snackbar;
-import com.google.firebase.firestore.FirebaseFirestoreException;
-import com.google.firebase.firestore.Query;
 
 public class MainActivity extends AppCompatActivity {
+    SharedPreferences mPrefs;
+    final String splashScreenPref= "SplashScreenShown";
+    Boolean splashScreenShown;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+        mPrefs = PreferenceManager.getDefaultSharedPreferences(this);
+
+        splashScreenShown = mPrefs.getBoolean(splashScreenPref, false);
 
         new Handler(Looper.getMainLooper()).postDelayed(new Runnable() {
             @Override
@@ -40,7 +40,16 @@ public class MainActivity extends AppCompatActivity {
     }
 
     public void changeToSplashActivity() {
-        Intent i = new Intent(this, SplashActivity.class);
-        startActivity(i);
+        if (!splashScreenShown) {
+            Intent i = new Intent(this, SplashActivity.class);
+            startActivity(i);
+            SharedPreferences.Editor editor = mPrefs.edit();
+            editor.putBoolean(splashScreenPref, true);
+            editor.commit();
+        }
+        else {
+            Intent i = new Intent(this, LoginActivity.class);
+            startActivity(i);
+        }
     }
 }

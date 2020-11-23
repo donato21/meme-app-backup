@@ -2,8 +2,6 @@ package com.cs3326.projectmeme;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
-import androidx.fragment.app.FragmentManager;
-import androidx.fragment.app.FragmentTransaction;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -57,7 +55,10 @@ public class AppActivity extends AppCompatActivity {
         this.menu = menu;
         getMenuInflater().inflate(R.menu.actionbar, menu);
         // On init change to timeline frag
-        changeToTimelineFragment();
+        FrameLayout contentView = (FrameLayout) findViewById(R.id.app_fragment_container);
+        getSupportFragmentManager().beginTransaction()
+                .replace(contentView.getId(), new TimelineFragment())
+                .commit();
         return true;
     }
 

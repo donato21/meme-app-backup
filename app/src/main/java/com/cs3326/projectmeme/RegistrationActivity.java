@@ -114,6 +114,9 @@ public class RegistrationActivity extends AppCompatActivity {
 
                                             Intent intent = new Intent(RegistrationActivity.this, AppActivity.class);
                                             startActivity(intent);
+
+                                            // Kills Activity
+                                            finish();
                                             return;
                                         }
                                     });
