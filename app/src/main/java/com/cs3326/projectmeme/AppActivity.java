@@ -63,7 +63,6 @@ public class AppActivity extends AppCompatActivity {
 
     //Timeline Functions
         private void changeToTimelineFragment() {
-            menu.findItem(R.id.miProfile).setVisible(true);
             changeToFragment(new TimelineFragment());
         }
 
@@ -71,9 +70,12 @@ public class AppActivity extends AppCompatActivity {
             changeToTimelineFragment();
         }
 
+        public void updateTimelineUI() {
+            menu.findItem(R.id.miProfile).setVisible(true);
+        }
+
     //Profile Functions
         private void changeToProfileFragment() {
-            menu.findItem(R.id.miProfile).setVisible(false);
             changeToFragment(new ProfileFragment());
         }
 
@@ -82,6 +84,7 @@ public class AppActivity extends AppCompatActivity {
         }
 
         public void updateProfileUI() {
+            menu.findItem(R.id.miProfile).setVisible(false);
             ProfileFragment pf = (ProfileFragment) getSupportFragmentManager().findFragmentById(R.id.app_fragment_container);
             pf.displayNameTextView.setText(currentUser.getDisplayName());
             pf.emailTextView.setText(currentUser.getEmail());
