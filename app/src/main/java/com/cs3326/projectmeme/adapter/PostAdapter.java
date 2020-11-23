@@ -32,7 +32,6 @@ public class PostAdapter extends FirestoreAdapter<PostAdapter.ViewHolder>{
     @Override
     public ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         LayoutInflater inflater = LayoutInflater.from(parent.getContext());
-        // TODO: Missing item post id
         return new ViewHolder(inflater.inflate(R.layout.item_post,parent,false));
     }
 
@@ -52,7 +51,6 @@ public class PostAdapter extends FirestoreAdapter<PostAdapter.ViewHolder>{
 
         public ViewHolder(View itemView) {
             super(itemView);
-            // TODO: Create res/layout/item_post.xml and add id's below to xml file
             imageView = itemView.findViewById(R.id.post_item_image);
             titleView = itemView.findViewById(R.id.post_item_title);
             likedbyView = itemView.findViewById(R.id.post_item_likedby);
