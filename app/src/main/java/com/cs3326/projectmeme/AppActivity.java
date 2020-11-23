@@ -30,7 +30,6 @@ public class AppActivity extends AppCompatActivity {
     private Query mQuery;
     private PostAdapter mAdapter;
     private ViewGroup mEmptyView;
-    // Firebase Auth
     private FirebaseAuth mAuth;
     private FirebaseUser currentUser;
     TextView emailTextView, displayNameTextView;
@@ -42,7 +41,14 @@ public class AppActivity extends AppCompatActivity {
         setContentView(R.layout.activity_app);
         setTitle("");
 
-        getSupportFragmentManager().getFragments();
+        mAuth = FirebaseAuth.getInstance();
+        currentUser = mAuth.getCurrentUser();
+
+        if (currentUser == null){
+            Intent intent = new Intent(this, LoginActivity.class);
+            startActivity(intent);
+            return;
+        }
     }
 
     @Override
@@ -55,53 +61,63 @@ public class AppActivity extends AppCompatActivity {
         return true;
     }
 
-    private void changeToTimelineFragment() {
-        menu.findItem(R.id.miProfile).setVisible(true);
-        changeToFragment(new TimelineFragment());
-    }
-
-    private void changeToProfileFragment() {
-        menu.findItem(R.id.miProfile).setVisible(false);
-        changeToFragment(new ProfileFragment());
-    }
-
-    public void onSignOutClick(View view){
-        mAuth.signOut();
-        Intent intent = new Intent(this, LoginActivity.class);
-        startActivity(intent);
-    }
-
-    private void changeToFragment(Fragment fragment){
-        FrameLayout contentView = (FrameLayout) findViewById(R.id.app_fragment_container);
-        getSupportFragmentManager().beginTransaction()
-                .replace(contentView.getId(), fragment)
-                .addToBackStack(null)
-                .commit();
-    }
-
-    public void onToProfileClicked(MenuItem mi) {
-        changeToProfileFragment();
-    }
-
-    public void onToTimelineClicked(View view) {
-        changeToTimelineFragment();
-    }
-
-    // TODO: initRecyclerView
-    private void initRecylclerView() {
-        if( mQuery == null ) {
-            //Error
+    //Timeline Functions
+        private void changeToTimelineFragment() {
+            menu.findItem(R.id.miProfile).setVisible(true);
+            changeToFragment(new TimelineFragment());
         }
 
-        mAdapter = new PostAdapter(mQuery, (PostAdapter.OnPostSelecterListener) this) {
-            @Override
-            protected void onDataChanged() {
+        public void onToTimelineClicked(View view) {
+            changeToTimelineFragment();
+        }
 
+    //Profile Functions
+        private void changeToProfileFragment() {
+            menu.findItem(R.id.miProfile).setVisible(false);
+            changeToFragment(new ProfileFragment());
+        }
+
+        public void onToProfileClicked(MenuItem mi) {
+            changeToProfileFragment();
+        }
+
+        public void updateProfileUI() {
+            ProfileFragment pf = (ProfileFragment) getSupportFragmentManager().findFragmentById(R.id.app_fragment_container);
+            pf.displayNameTextView.setText(currentUser.getDisplayName());
+            pf.emailTextView.setText(currentUser.getEmail());
+        }
+
+        public void onSignOutClick(View view){
+            mAuth.signOut();
+            Intent intent = new Intent(this, LoginActivity.class);
+            startActivity(intent);
+        }
+
+    //Fragment Functions
+        private void changeToFragment(Fragment fragment){
+            FrameLayout contentView = (FrameLayout) findViewById(R.id.app_fragment_container);
+            getSupportFragmentManager().beginTransaction()
+                        .replace(contentView.getId(), fragment)
+                        .addToBackStack(null)
+                        .commit();
+        }
+
+    //Firestore Functions
+        // TODO: initRecyclerView
+        private void initRecyclerView() {
+            if( mQuery == null ) {
+                //Error
             }
-        };
 
-        // TODO: set layout manager & set adapter
-        mPostsRecycler.setLayoutManager(new LinearLayoutManager(this));
-        mPostsRecycler.setAdapter(mAdapter);
-    }
+            mAdapter = new PostAdapter(mQuery, (PostAdapter.OnPostSelecterListener) this) {
+                @Override
+                protected void onDataChanged() {
+
+                }
+            };
+
+            // TODO: set layout manager & set adapter
+            mPostsRecycler.setLayoutManager(new LinearLayoutManager(this));
+            mPostsRecycler.setAdapter(mAdapter);
+        }
 }
