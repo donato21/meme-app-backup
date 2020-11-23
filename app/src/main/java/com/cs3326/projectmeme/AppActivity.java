@@ -1,17 +1,16 @@
 package com.cs3326.projectmeme;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import android.app.Activity;
-import android.content.Context;
 import android.content.Intent;
-import android.content.res.Resources;
 import android.os.Bundle;
 import android.view.LayoutInflater;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -19,8 +18,10 @@ import android.view.ViewGroup;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
+import com.cs3326.projectmeme.app.makepost.MakePostFragment;
 import com.cs3326.projectmeme.app.profile.ProfileFragment;
 import com.cs3326.projectmeme.app.timeline.TimelineFragment;
 import com.cs3326.projectmeme.model.Post;
@@ -32,6 +33,8 @@ import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.Query;
+
+import java.util.List;
 
 public class AppActivity extends AppCompatActivity {
 
@@ -196,4 +199,47 @@ public class AppActivity extends AppCompatActivity {
         }
     }
 
+
+    public void onFabCreatePostClick(View view) {
+        FrameLayout contentView = (FrameLayout) findViewById(R.id.app_fragment_container);
+
+        /*getSupportFragmentManager()
+                .beginTransaction()
+                .add(contentView.getId(), new MakePostFragment(), "MakePostFragment")
+                .commit();*/
+
+        changeToFragment(new MakePostFragment());
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+
+        if(requestCode == MakePostFragment.SELECT_IMAGE_CODE) {
+            /*MakePostFragment makePostFragment = (MakePostFragment) getSupportFragmentManager().findFragmentByTag("MakePostFragment");
+
+            if(makePostFragment != null && data != null) {
+                makePostFragment.processSelectedImage(data.getData());
+            }
+            else {
+                Log.e("MakePostFragment", "makePostFragment or Intent data is null");
+            }*/
+
+            List<Fragment> fragmentList = getSupportFragmentManager().getFragments();
+
+            for(Fragment fragment : fragmentList) {
+                if(fragment instanceof MakePostFragment) {
+                    MakePostFragment makePostFragment = (MakePostFragment) fragment;
+                    if(data != null) {
+                        Toast.makeText(this, "Image Selected!", Toast.LENGTH_SHORT).show();
+                        makePostFragment.processSelectedImage(data.getData());
+                    }
+                    else {
+                        Log.e("MakePostFragment", "Intent data is null");
+                    }
+                    break;
+                }
+            }
+        }
+    }
 }

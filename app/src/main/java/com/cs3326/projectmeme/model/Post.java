@@ -3,6 +3,8 @@ package com.cs3326.projectmeme.model;
 import java.util.ArrayList;
 import java.util.List;
 
+import java.util.List;
+
 public class Post {
 
     public static final String FIELD_TITLE = "title";
@@ -11,15 +13,17 @@ public class Post {
 
     private String title;
     private String image;
+    private byte[] imageBytes;
     private List<String> likedBy;
     private String text;
     private static String postedBy;
 
     public Post(){}
 
-    public Post(String title, String image, List<String> likedBy, String text, String postedBy) {
+    public Post(String title, byte[] imageBytes, List<String> likedBy, String text, String postedBy) {
         this.title = title;
         this.image = image;
+        this.imageBytes = imageBytes;
         this.likedBy = likedBy;
         this.text = text;
         this.postedBy = postedBy;
@@ -30,9 +34,22 @@ public class Post {
 
     public void setTitle(String title) { this.title = title; }
 
-    public String getImage() { return image; }
+    public byte[] getImageBytes() {
+        return imageBytes;
+    }
 
-    public void setImage(String image) { this.image = image; }
+    public void setImageBytes(byte[] imageBytes) {
+        this.imageBytes = imageBytes;
+    }
+
+
+    public String getImage() {
+        return image;
+    }
+
+    public void setImage(String image) {
+        this.image = image;
+    }
 
     public List<String> getLikedBy() { return likedBy; }
 
