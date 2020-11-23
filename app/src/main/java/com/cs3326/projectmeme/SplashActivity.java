@@ -9,6 +9,18 @@ import android.os.Looper;
 
 public class SplashActivity extends AppCompatActivity {
 
+    // Splash: show one time per session
+    private static boolean canShowSplash = true;
+    // Setter
+    public static void showedSplash() {
+        canShowSplash = false;
+    }
+
+    // Getter
+    public static boolean canShowSplash() {
+        return canShowSplash;
+    }
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);

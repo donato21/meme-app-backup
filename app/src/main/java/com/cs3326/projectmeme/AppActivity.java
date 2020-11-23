@@ -30,7 +30,6 @@ public class AppActivity extends AppCompatActivity {
     private ViewGroup mEmptyView;
     private FirebaseAuth mAuth;
     private FirebaseUser currentUser;
-    TextView emailTextView, displayNameTextView;
     Menu menu;
 
     @Override
@@ -73,6 +72,8 @@ public class AppActivity extends AppCompatActivity {
 
         public void updateTimelineUI() {
             menu.findItem(R.id.miProfile).setVisible(true);
+            // TODO: This is a reference for another TODO
+//            initRecyclerView();
         }
 
     //Profile Functions
@@ -107,21 +108,23 @@ public class AppActivity extends AppCompatActivity {
         }
 
     //Firestore Functions
-        // TODO: initRecyclerView
         private void initRecyclerView() {
-            if( mQuery == null ) {
-                //Error
-            }
+//            if( mQuery == null ) {
+//                //Error
+//            }
 
+            mPostsRecycler = findViewById(R.id.post_container);
+
+            // TODO: this does not map to OnPostSelecterListener interface, fix that
+            // TODO: Query in blank, need to set query before parent function is called
             mAdapter = new PostAdapter(mQuery, (PostAdapter.OnPostSelecterListener) this) {
                 @Override
                 protected void onDataChanged() {
-
+                    System.out.println("Listened!");
                 }
             };
 
-            // TODO: set layout manager & set adapter
-            mPostsRecycler.setLayoutManager(new LinearLayoutManager(this));
             mPostsRecycler.setAdapter(mAdapter);
+            mPostsRecycler.setLayoutManager(new LinearLayoutManager(this));
         }
 }

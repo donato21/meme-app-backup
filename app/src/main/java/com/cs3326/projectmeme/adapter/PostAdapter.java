@@ -5,6 +5,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
@@ -17,6 +18,8 @@ import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.Query;
 
 public class PostAdapter extends FirestoreAdapter<PostAdapter.ViewHolder>{
+
+    // TODO: onPostSelected is initialized but has no logic / data, fix that
     public interface OnPostSelecterListener {
         void onPostSelected(DocumentSnapshot post);
     }
@@ -64,6 +67,7 @@ public class PostAdapter extends FirestoreAdapter<PostAdapter.ViewHolder>{
             Resources resources = itemView.getResources();//Not sure what this does? I think its the icons
 
             // Load image
+            assert post != null;
             Glide.with(imageView.getContext())
                     .load(post.getImage())
                     .into(imageView);
