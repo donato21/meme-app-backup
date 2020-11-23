@@ -21,7 +21,6 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
-import com.cs3326.projectmeme.adapter.PostAdapter;
 import com.cs3326.projectmeme.app.profile.ProfileFragment;
 import com.cs3326.projectmeme.app.timeline.TimelineFragment;
 import com.cs3326.projectmeme.model.Post;
@@ -37,9 +36,10 @@ import com.google.firebase.firestore.Query;
 public class AppActivity extends AppCompatActivity {
 
     // TODO: Implement adapter
-    private RecyclerView mPostsRecycler;
+    private RecyclerView mPostsRecyclerView;
     private Query mQuery;
-    private PostAdapter mAdapter;
+    private FirestoreRecyclerAdapter<Post, ProductViewHolder> mAdapter;
+//    private PostAdapter mAdapter;
     private ViewGroup mEmptyView;
     private FirebaseAuth mAuth;
     private FirebaseUser currentUser;
@@ -54,8 +54,34 @@ public class AppActivity extends AppCompatActivity {
 
         mAuth = FirebaseAuth.getInstance();
         currentUser = mAuth.getCurrentUser();
-        //fbApp = FirebaseApp.initializeApp(getApplicationContext());
 
+        // Query init for Adapter
+        mQuery = FirebaseFirestore.getInstance()
+                .collection("posts")
+                .orderBy("postedBy")
+                .limit(50);
+
+        // Options init for Adapter
+        FirestoreRecyclerOptions<Post> options = new FirestoreRecyclerOptions.Builder<Post>()
+                .setQuery(mQuery, Post.class)
+                .build();
+
+        // Init adapter, sets up mapping
+        mAdapter = new FirestoreRecyclerAdapter<Post, ProductViewHolder>(options) {
+            @Override
+            protected void onBindViewHolder(@NonNull ProductViewHolder holder, int position, @NonNull Post post) {
+                holder.bind(post);
+            }
+
+            @NonNull
+            @Override
+            public ProductViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
+                View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_post, parent, false);
+                return new ProductViewHolder(view);
+            }
+        };
+
+        // Check user logged in
         if (currentUser == null){
             Intent intent = new Intent(this, LoginActivity.class);
             startActivity(intent);
@@ -86,12 +112,13 @@ public class AppActivity extends AppCompatActivity {
         }
 
         public void updateTimelineUI() {
+            // Enable profile icon
             menu.findItem(R.id.miProfile).setVisible(true);
-            mQuery = FirebaseFirestore.getInstance()
-                    .collection("posts")
-                    .orderBy("postedBy")
-                    .limit(50);
-            initRecyclerView();
+
+            // Update view on fragment load
+            mPostsRecyclerView = findViewById(R.id.recycler_view);
+            mPostsRecyclerView.setLayoutManager(new LinearLayoutManager(this));
+            mPostsRecyclerView.setAdapter(mAdapter);
         }
 
     //Profile Functions
@@ -125,19 +152,48 @@ public class AppActivity extends AppCompatActivity {
                         .commit();
         }
 
-    //Firestore Functions
-        private void initRecyclerView() {
-            if( mQuery == null ) {
-                System.out.println("Query was blank, yo!");
+        // Post mapping Boi
+        private class ProductViewHolder extends RecyclerView.ViewHolder {
+            private View view;
+            TextView titleView;
+            ImageView imageView;
+            TextView likedbyView;
+            TextView textView;
+            TextView postedbyView;
+
+            ProductViewHolder(View itemView) {
+                super(itemView);
+                view = itemView;
+                imageView = itemView.findViewById(R.id.post_item_image);
+                titleView = itemView.findViewById(R.id.post_item_title);
+                likedbyView = itemView.findViewById(R.id.post_item_likedby);
+                textView = itemView.findViewById(R.id.post_item_text);
+                postedbyView = itemView.findViewById(R.id.post_item_postedby);
             }
-            else {
-                mPostsRecycler = findViewById(R.id.recycler_view);
 
-                // TODO: this does not map to OnPostSelecterListener interface, fix that
-                mAdapter = new PostAdapter(mQuery);
-
-                mPostsRecycler.setAdapter(mAdapter);
-                mPostsRecycler.setLayoutManager(new LinearLayoutManager(this));
+            void bind(Post post) {
+                postedbyView.setText(post.getPostedBy());
+                textView.setText(post.getText());
+                Glide.with(imageView.getContext())
+                        .load(post.getImage())
+                        .into(imageView);
             }
         }
+
+    // Listeners for the Adapter
+    @Override
+    protected void onStart() {
+        super.onStart();
+        mAdapter.startListening();
+    }
+
+    @Override
+    protected void onStop() {
+        super.onStop();
+
+        if (mAdapter != null) {
+            mAdapter.stopListening();
+        }
+    }
+
 }
