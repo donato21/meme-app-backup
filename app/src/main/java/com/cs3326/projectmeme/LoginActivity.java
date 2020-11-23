@@ -65,6 +65,9 @@ public class LoginActivity extends AppCompatActivity {
             // TODO: Redirect to timeline
             Intent intent = new Intent(LoginActivity.this, AppActivity.class);
             startActivity(intent);
+
+            // Kills Activity
+            finish();
             return;
 
 //            // TODO: Remove Temporary enable
@@ -112,6 +115,8 @@ public class LoginActivity extends AppCompatActivity {
                                 Toast.makeText(LoginActivity.this, "Authentication successful.", Toast.LENGTH_SHORT).show();
                                 Intent intent = new Intent(LoginActivity.this, AppActivity.class);
                                 startActivity(intent);
+                                // Kills Activity
+                                finish();
                                 return;
 
                             } else {

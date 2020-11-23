@@ -5,6 +5,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
@@ -13,19 +14,26 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.bumptech.glide.Glide;
 import com.cs3326.projectmeme.R;
 import com.cs3326.projectmeme.model.Post;
+import com.firebase.ui.firestore.FirestoreRecyclerAdapter;
+import com.firebase.ui.firestore.FirestoreRecyclerOptions;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.Query;
 
 public class PostAdapter extends FirestoreAdapter<PostAdapter.ViewHolder>{
+
+    // TODO: onPostSelected is initialized but has no logic / data, fix that
     public interface OnPostSelecterListener {
         void onPostSelected(DocumentSnapshot post);
     }
 
     private OnPostSelecterListener mListener;
 
-    public PostAdapter(Query query, OnPostSelecterListener listener) {
+    public PostAdapter(Query query) {// OnPostSelecterListener listener) {
         super(query);
-        mListener = listener;
+//        mListener = listener;
+        FirestoreRecyclerOptions<Post> options = new FirestoreRecyclerOptions.Builder<Post>()
+                .setQuery(query, Post.class)
+                .build();
     }
 
     @NonNull
@@ -37,7 +45,7 @@ public class PostAdapter extends FirestoreAdapter<PostAdapter.ViewHolder>{
 
     @Override
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
-        holder.bind(getSnapshot(position), mListener);
+        holder.bind(getSnapshot(position));//, mListener);
     }
 
     //Class: Maps data to a view dynamically from input of DB
@@ -58,24 +66,23 @@ public class PostAdapter extends FirestoreAdapter<PostAdapter.ViewHolder>{
             postedbyView = itemView.findViewById(R.id.post_item_postedby);
         }
 
-        public void bind(final DocumentSnapshot snapshot,
-                         final OnPostSelecterListener listener) {
-            Post post = snapshot.toObject(Post.class);        //Maps each object to a Post object
-            Resources resources = itemView.getResources();//Not sure what this does? I think its the icons
+        public void bind(final DocumentSnapshot snapshot) {//, final OnPostSelecterListener listener) {
+            Post post = snapshot.toObject(Post.class);// Maps each object to a Post object
+            Resources resources = itemView.getResources();// Not sure what this does? I think its the icons
 
             // Load image
+            assert post != null;
             Glide.with(imageView.getContext())
                     .load(post.getImage())
                     .into(imageView);
 
             titleView.setText(post.getTitle());
             textView.setText(post.getText());
-            // TODO: likebyView.setText()
+            // TODO: Set text of likedbyView
             postedbyView.setText(post.getPostedBy());
         }
 
         // TODO: Click Listener(Optional)
-
     }
 }
 
