@@ -18,13 +18,6 @@ import com.google.firebase.firestore.Query;
 
 public class MainActivity extends AppCompatActivity {
 
-    // TODO: Implement adapter
-    private RecyclerView mPostsRecycler;
-    private Query mQuery;
-    private PostAdapter mAdapter;
-    private ViewGroup mEmptyView;
-
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -49,23 +42,5 @@ public class MainActivity extends AppCompatActivity {
     public void changeToSplashActivity() {
         Intent i = new Intent(this, SplashActivity.class);
         startActivity(i);
-    }
-
-    // TODO: initRecyclerView
-    private void initRecylclerView() {
-        if( mQuery == null ) {
-            //Error
-        }
-
-        mAdapter = new PostAdapter(mQuery, (PostAdapter.OnPostSelecterListener) this) {
-            @Override
-            protected void onDataChanged() {
-
-            }
-        };
-
-        // TODO: set layout manager & set adapter
-        mPostsRecycler.setLayoutManager(new LinearLayoutManager(this));
-        mPostsRecycler.setAdapter(mAdapter);
     }
 }

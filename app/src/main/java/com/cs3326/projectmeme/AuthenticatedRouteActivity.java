@@ -34,7 +34,6 @@ public class AuthenticatedRouteActivity extends AppCompatActivity {
         }
 
         displayNameTextView.setText(currentUser.getDisplayName());
-        displayNameTextView.setText(currentUser.getDisplayName());
         emailTextView.setText(currentUser.getEmail());
     }
 
