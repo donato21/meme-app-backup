@@ -4,8 +4,8 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="#212130"
-    tools:context=".app.TimelineFragment">
+    android:background="#5C5F77"
+    tools:context=".app.timeline.TimelineFragment">
 
     <TextView
         android:id="@+id/textView_1"
@@ -26,7 +26,7 @@
         android:layout_height="wrap_content"
         android:layout_marginBottom="342dp"
         android:background="#D82E00"
-        android:onClick="changeToTimelineFragment"
+        android:onClick="onToTimelineClicked"
         android:text="Button"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"

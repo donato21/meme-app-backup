@@ -31,7 +31,7 @@ public class SplashActivity extends AppCompatActivity {
     }
 
     public void changeToLoginActivity() {
-        Intent i = new Intent(this, Login.class);//Changed temp to test AppActivity
+        Intent i = new Intent(this, LoginActivity.class);//Changed temp to test AppActivity
         startActivity(i);
     }
 }

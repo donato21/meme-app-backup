@@ -7,12 +7,13 @@
     android:background="#5C5F77"
     tools:context=".AppActivity">
 
-    <fragment
-        android:id="@+id/fragment"
-        android:name="com.cs3326.projectmeme.app.TimelineFragment"
+    <FrameLayout
+        android:id="@+id/app_fragment_container"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        tools:layout_editor_absoluteX="140dp"
-        tools:layout_editor_absoluteY="278dp" />
+        tools:layout_editor_absoluteX="42dp"
+        tools:layout_editor_absoluteY="385dp">
+
+    </FrameLayout>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

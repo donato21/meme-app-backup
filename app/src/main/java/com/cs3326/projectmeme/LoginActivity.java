@@ -22,7 +22,7 @@ import com.google.firebase.auth.FirebaseUser;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-public class Login extends AppCompatActivity {
+public class LoginActivity extends AppCompatActivity {
     private FirebaseAuth mAuth;
     private FirebaseUser currentUser;
 
@@ -60,10 +60,10 @@ public class Login extends AppCompatActivity {
         else
         {
             Log.d("LoginActivity", "User is signed in: " + currentUser.getEmail().toString());
-            Toast.makeText(Login.this, "Authentication successful.", Toast.LENGTH_SHORT).show();
+            Toast.makeText(LoginActivity.this, "Authentication successful.", Toast.LENGTH_SHORT).show();
 
             // TODO: Redirect to timeline
-            Intent intent = new Intent(Login.this, AppActivity.class);
+            Intent intent = new Intent(LoginActivity.this, AppActivity.class);
             startActivity(intent);
             return;
 
@@ -109,15 +109,14 @@ public class Login extends AppCompatActivity {
                         public void onComplete(@NonNull Task<AuthResult> task) {
                             if (task.isSuccessful()) {
                                 Log.d("LoginActivity", "signInWithEmail:success");
-                                Toast.makeText(Login.this, "Authentication successful.", Toast.LENGTH_SHORT).show();
-
-                                Intent intent = new Intent(Login.this, AppActivity.class);
+                                Toast.makeText(LoginActivity.this, "Authentication successful.", Toast.LENGTH_SHORT).show();
+                                Intent intent = new Intent(LoginActivity.this, AppActivity.class);
                                 startActivity(intent);
                                 return;
 
                             } else {
                                 Log.w("LoginActivity", "signInWithEmail:failure", task.getException());
-                                Toast.makeText(Login.this, "Authentication failed.", Toast.LENGTH_SHORT).show();
+                                Toast.makeText(LoginActivity.this, "Authentication failed.", Toast.LENGTH_SHORT).show();
                                 passwordEditText.setText("");
                                 setLoginEditable(true);
                             }
