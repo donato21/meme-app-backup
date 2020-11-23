@@ -11,6 +11,7 @@
     android:id="@+id/post_container"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
+    android:layout_marginTop="10dp"
     android:background="#212130">
 
     <TextView
@@ -78,6 +79,8 @@
         android:textAlignment="center"
         android:thicknessRatio="1.9"
         app:cardCornerRadius="40dp"
+        app:cardElevation="10dp"
+        app:cardMaxElevation="10dp"
         app:layout_constraintBottom_toTopOf="@+id/post_item_text"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.0"

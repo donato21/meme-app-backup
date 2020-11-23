@@ -11,6 +11,7 @@
         android:id="@+id/app_fragment_container"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        android:background="#12121B"
         tools:layout_editor_absoluteX="42dp"
         tools:layout_editor_absoluteY="385dp">
 
