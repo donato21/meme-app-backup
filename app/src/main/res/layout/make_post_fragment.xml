@@ -40,7 +40,7 @@
             app:layout_constraintTop_toBottomOf="@+id/textView" />
 
         <Button
-            android:id="@+id/buttonRegister2"
+            android:id="@+id/buttonCreatePost"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginStart="25dp"
@@ -48,7 +48,6 @@
             android:layout_marginBottom="25dp"
             android:background="@drawable/rounded"
             android:backgroundTint="#D82E00"
-            android:onClick="onLoginClick"
             android:paddingStart="15dp"
             android:paddingLeft="15dp"
             android:paddingTop="15dp"
@@ -63,49 +62,47 @@
             app:layout_constraintStart_toStartOf="parent" />
 
         <Button
-            android:id="@+id/buttonRegister3"
+            android:id="@+id/buttonSelectImage"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="25dp"
             android:layout_marginTop="15dp"
             android:background="@drawable/rounded"
             android:backgroundTint="#2B2D3F"
-            android:onClick="onLoginClick"
             android:paddingStart="15dp"
             android:paddingLeft="15dp"
             android:paddingTop="15dp"
             android:paddingEnd="15dp"
             android:paddingRight="15dp"
             android:paddingBottom="15dp"
-            android:text="Add Photo"
+            android:text="Select Image"
             android:textColor="#FFFFFF"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/editTextEmailAddress2" />
+            app:layout_constraintTop_toBottomOf="@+id/editTextPostTitle" />
 
-        <Button
-            android:id="@+id/buttonRegister4"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="10dp"
-            android:background="@drawable/rounded"
-            android:backgroundTint="#2B2D3F"
-            android:onClick="onLoginClick"
-            android:paddingStart="15dp"
-            android:paddingLeft="15dp"
-            android:paddingTop="15dp"
-            android:paddingEnd="15dp"
-            android:paddingRight="15dp"
-            android:paddingBottom="15dp"
-            android:text="Remove Photo"
-            android:textColor="#FFFFFF"
-            app:layout_constraintBottom_toBottomOf="@+id/buttonRegister3"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.0"
-            app:layout_constraintStart_toEndOf="@+id/buttonRegister3"
-            app:layout_constraintTop_toTopOf="@+id/buttonRegister3" />
+        <!--        <Button-->
+        <!--            android:id="@+id/buttonRemovePhoto"-->
+        <!--            android:layout_width="wrap_content"-->
+        <!--            android:layout_height="wrap_content"-->
+        <!--            android:layout_marginStart="10dp"-->
+        <!--            android:background="@drawable/rounded"-->
+        <!--            android:backgroundTint="#2B2D3F"-->
+        <!--            android:paddingStart="15dp"-->
+        <!--            android:paddingLeft="15dp"-->
+        <!--            android:paddingTop="15dp"-->
+        <!--            android:paddingEnd="15dp"-->
+        <!--            android:paddingRight="15dp"-->
+        <!--            android:paddingBottom="15dp"-->
+        <!--            android:text="Remove Photo"-->
+        <!--            android:textColor="#FFFFFF"-->
+        <!--            app:layout_constraintBottom_toBottomOf="@+id/buttonUploadPhoto"-->
+        <!--            app:layout_constraintEnd_toEndOf="parent"-->
+        <!--            app:layout_constraintHorizontal_bias="0.0"-->
+        <!--            app:layout_constraintStart_toEndOf="@+id/buttonUploadPhoto"-->
+        <!--            app:layout_constraintTop_toTopOf="@+id/buttonUploadPhoto" />-->
 
         <EditText
-            android:id="@+id/editTextEmailAddress2"
+            android:id="@+id/editTextPostTitle"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginStart="25dp"
@@ -115,7 +112,7 @@
             android:backgroundTint="#2B2D3F"
             android:ems="10"
             android:hint="Title"
-            android:inputType="textEmailAddress"
+            android:inputType="text"
             android:paddingStart="12dp"
             android:paddingLeft="12dp"
             android:paddingTop="12dp"
@@ -129,6 +126,16 @@
             app:layout_constraintHorizontal_bias="1.0"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/textView9" />
+
+        <ImageView
+            android:id="@+id/create_post_image_view"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:layout_constraintBottom_toTopOf="@id/buttonCreatePost"
+            app:layout_constraintTop_toBottomOf="@id/buttonSelectImage"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintRight_toRightOf="parent"
+            android:layout_margin="25dp"/>
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 </FrameLayout>

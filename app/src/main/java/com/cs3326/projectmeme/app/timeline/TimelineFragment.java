@@ -33,7 +33,6 @@ public class TimelineFragment extends Fragment {// TODO: Implement adapter
     private LinearLayoutManager mLayoutManager;
 
     private TimelineViewModel mViewModel;
-
     public static TimelineFragment newInstance() {
         return new TimelineFragment();
     }
@@ -41,10 +40,6 @@ public class TimelineFragment extends Fragment {// TODO: Implement adapter
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container,
                              @Nullable Bundle savedInstanceState) {
-
-//        mRecyclerView.setLayoutManager(
-//                new LinearLayoutManager(getActivity()));
-
         // Query init for Adapter
         mQuery = FirebaseFirestore.getInstance()
                 .collection("posts")
@@ -72,6 +67,7 @@ public class TimelineFragment extends Fragment {// TODO: Implement adapter
         };
 
         mLayoutManager = new LinearLayoutManager(((AppActivity)getActivity()));
+
         return inflater.inflate(R.layout.timeline_fragment, container, false);
     }
 
