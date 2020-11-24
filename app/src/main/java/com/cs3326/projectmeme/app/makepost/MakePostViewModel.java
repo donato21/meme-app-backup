@@ -1,6 +1,8 @@
 package com.cs3326.projectmeme.app.makepost;
 
 import android.content.Context;
+import android.graphics.Bitmap;
+import android.graphics.drawable.BitmapDrawable;
 import android.net.Uri;
 import android.util.Log;
 import android.widget.Toast;
@@ -15,100 +17,58 @@ import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
 
+import java.io.ByteArrayOutputStream;
 import java.lang.ref.WeakReference;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.UUID;
 
 public class MakePostViewModel extends ViewModel {
     FirebaseStorage firebaseStorage;
     private MutableLiveData<Boolean> imageUploadedSuccessfully;
-    private WeakReference<Context> appContext;
-    private Uri dUri;
-    FirebaseFirestore db;
+    private WeakReference<MakePostFragment> appContext;
 
-    public void init(Context context) {
-        appContext = new WeakReference<>(context);
+    public void init(MakePostFragment makePostFragment) {
+        appContext = new WeakReference<>(makePostFragment);
         firebaseStorage = FirebaseStorage.getInstance();
         imageUploadedSuccessfully = new MutableLiveData<>(false);
     }
 
-    public void uploadPost(Post post) {
+    public void uploadImage(final String postId) {
+        StorageReference storageReference = firebaseStorage.getReference();
+        MakePostFragment makePostFragment = appContext.get();
+        Bitmap bitmap = ((BitmapDrawable) makePostFragment.getCreatePostImageView().getDrawable()).getBitmap();
+        ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
+        bitmap.compress(Bitmap.CompressFormat.PNG, 100, byteArrayOutputStream);
 
-        if (post.getImageBytes() != null) {
-            String fileName = UUID.randomUUID().toString();
-            final StorageReference ref = firebaseStorage.getReference().child("images/" + fileName);
-            UploadTask uploadTask = ref.putBytes(post.getImageBytes());
+        final StorageReference ref = storageReference.child("images/"+postId);
+        UploadTask uploadTask = ref.putBytes(byteArrayOutputStream.toByteArray());
 
-            uploadTask.addOnFailureListener(new OnFailureListener() {
-                @Override
-                public void onFailure(@NonNull Exception e) {
-                    Toast.makeText(appContext.get().getApplicationContext(), "Failed to upload image", Toast.LENGTH_SHORT).show();
-                }
-            }).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
-                @Override
-                public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
-                    Toast.makeText(appContext.get().getApplicationContext(), "Uploaded image successfully!", Toast.LENGTH_SHORT).show();
-                    imageUploadedSuccessfully.setValue(true);
-                }
-            });
-
-            Task<Uri> urlTask = uploadTask.continueWithTask(new Continuation<UploadTask.TaskSnapshot, Task<Uri>>() {
-                @Override
-                public Task<Uri> then(@NonNull Task<UploadTask.TaskSnapshot> task) throws Exception {
-                    if (!task.isSuccessful()) {
-                        throw task.getException();
-                    }
-
-                    // Continue with the task to get the download URL
-                    return ref.getDownloadUrl();
-                }
-            }).addOnCompleteListener(new OnCompleteListener<Uri>() {
-                @Override
-                public void onComplete(@NonNull Task<Uri> task) {
-                    if (task.isSuccessful()) {
-                        // URI!!! POG
-                        Uri downloadUri = task.getResult();
-                        setUri(downloadUri);
-
-                    } else {
-                        // Handle failures
-                        // ...
-                    }
-                }
-            });
-        }
-
-        post.setImage(dUri.toString());
-        savePostToFirestore(post);
-    }
-
-    private void savePostToFirestore(Post post) {
-        Map<String, Object> city = new HashMap<>();
-        city.put("name", "Los Angeles");
-        city.put("state", "CA");
-        city.put("country", "USA");
-        db.collection("posts").add(city).addOnSuccessListener(new OnSuccessListener() {
+        Task<Uri> task = uploadTask.continueWithTask(new Continuation<UploadTask.TaskSnapshot, Task<Uri>>() {
             @Override
-            public void onSuccess(Object o) {
-
-                Log.d("", "DocumentSnapshot successfully written!");
+            public Task<Uri> then(@NonNull Task<UploadTask.TaskSnapshot> task) throws Exception {
+                if(!task.isSuccessful()) {
+                    throw task.getException();
+                }
+                return ref.getDownloadUrl();
             }
-        }).addOnFailureListener(new OnFailureListener() {
+        }).addOnCompleteListener(new OnCompleteListener<Uri>() {
             @Override
-            public void onFailure(@NonNull Exception e) {
-                Log.w("", "Error writing document", e);
+            public void onComplete(@NonNull Task<Uri> task) {
+                if(task.isSuccessful()) {
+                    Toast.makeText(appContext.get().getActivity(), "Uploaded image successfully in Storage!", Toast.LENGTH_SHORT).show();
+                    String downloadUrl = task.getResult().toString();
+                    updatePostItemWithUrl(postId, downloadUrl);
+                }
+                else {
+                    Toast.makeText(appContext.get().getActivity(), "Failed to upload image or get image download URL", Toast.LENGTH_SHORT).show();
+                }
             }
         });
-    }
-
-    private void setUri(Uri uri) {
-        dUri = uri;
     }
 
     public MutableLiveData<Boolean> getImageUploadedSuccessfully() {
@@ -117,5 +77,60 @@ public class MakePostViewModel extends ViewModel {
 
     public void setImageUploadedSuccessfully(MutableLiveData<Boolean> imageUploadedSuccessfully) {
         this.imageUploadedSuccessfully = imageUploadedSuccessfully;
+    }
+
+    public Post buildPostObj(){
+        MakePostFragment makePostFragment = appContext.get();
+        Post post = new Post();
+        post.setPostedBy(FirebaseAuth.getInstance().getCurrentUser().getDisplayName());
+        post.setText(makePostFragment.getEditTextPostTitle().getText().toString());
+
+        return post;
+    }
+
+    private void savePostToFirestore(Post post) {
+        FirebaseFirestore db = FirebaseFirestore.getInstance();
+        db.collection("posts")
+        .add(post)
+        .addOnSuccessListener(new OnSuccessListener<DocumentReference>() {
+            @Override
+            public void onSuccess(DocumentReference documentReference) {
+                Toast.makeText(appContext.get().getActivity(), "Post successfully saved without image url!", Toast.LENGTH_SHORT).show();
+                Log.d("MakePostViewModel", "Post added with ID: " + documentReference.getId());
+                uploadImage(documentReference.getId());
+            }
+        })
+        .addOnFailureListener(new OnFailureListener() {
+            @Override
+            public void onFailure(@NonNull Exception e) {
+                Toast.makeText(appContext.get().getActivity(), "Post failed to save", Toast.LENGTH_SHORT).show();
+                Log.d("MakePostViewModel", "Error adding post", e);
+            }
+        });
+    }
+
+    public void saveAndUploadPost() {
+        Post post = buildPostObj();
+        savePostToFirestore(post);
+    }
+
+    private void updatePostItemWithUrl(final String postId, String imageUrl) {
+        FirebaseFirestore db = FirebaseFirestore.getInstance();
+        db.collection("posts")
+        .document(postId)
+        .update("image", imageUrl)
+        .addOnSuccessListener(new OnSuccessListener<Void>() {
+            @Override
+            public void onSuccess(Void aVoid) {
+                Toast.makeText(appContext.get().getActivity(), "Updated post with the image url successfully!", Toast.LENGTH_SHORT).show();
+                imageUploadedSuccessfully.setValue(true);
+            }
+        })
+        .addOnFailureListener(new OnFailureListener() {
+            @Override
+            public void onFailure(@NonNull Exception e) {
+                Toast.makeText(appContext.get().getActivity(), "Update post with the image url failed!", Toast.LENGTH_SHORT).show();
+            }
+        });
     }
 }

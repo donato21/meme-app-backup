@@ -11,11 +11,9 @@ import java.util.List;
 
 public class Post {
 
-    public static final String FIELD_TITLE = "title";
     public static final String FIELD_IMAGE = "image";
     public static final String FIELD_TEXT = "text";
 
-    private String title;
     private String image;
     private byte[] imageBytes;
     private List<String> likedBy;
@@ -27,25 +25,19 @@ public class Post {
 
     public Post(){}
 
-    public Post(String title, byte[] imageBytes, List<String> likedBy, String text, String postedBy, String documentId) {
-        this.title = title;
+    public Post (byte[] imageBytes, String image, List<String> likedBy, String text, String postedBy, String documentId) {
         this.image = image;
-        this.imageBytes = imageBytes;
         this.likedBy = likedBy;
         this.text = text;
         this.postedBy = postedBy;
         this.documentId = documentId;
+        this.imageBytes = imageBytes;
     }
 
     //Getter's and Setter's
     public String getDocumentId() {return documentId; }
 
     public void setDocumentId(String documentId){ this.documentId = documentId; }
-
-
-    public String getTitle() { return title; }
-
-    public void setTitle(String title) { this.title = title; }
 
     public byte[] getImageBytes() {
         return imageBytes;
@@ -54,7 +46,6 @@ public class Post {
     public void setImageBytes(byte[] imageBytes) {
         this.imageBytes = imageBytes;
     }
-
 
     public String getImage() {
         return image;
