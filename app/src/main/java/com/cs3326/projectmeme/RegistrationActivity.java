@@ -53,9 +53,6 @@ import java.util.regex.Pattern;
 public class RegistrationActivity extends AppCompatActivity {
     EditText displayNameEditText, emailEditText, passwordEditText, passwordConfirmEditText;
     private FirebaseAuth mAuth;
-    ProfileImage mViewModel;
-    public static final int SELECT_IMAGE_CODE = 11;
-    Uri profileImageLink;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -69,29 +66,6 @@ public class RegistrationActivity extends AppCompatActivity {
         emailEditText = (EditText) findViewById(R.id.editTextEmail);
         passwordEditText = (EditText) findViewById(R.id.editTextPassword);
         passwordConfirmEditText = (EditText) findViewById(R.id.editTextPasswordConfirm);
-
-
-        mViewModel = new ProfileImage();
-        mViewModel.init(RegistrationActivity.this);
-        startImageUploadListener();
-    }
-
-    public void startImageUploadListener() {
-        mViewModel.getImageUploadedSuccessfully().observe(this, new Observer<Boolean>() {
-            @Override
-            public void onChanged(Boolean imageUploadedSuccessfully) {
-                if (imageUploadedSuccessfully) {
-                    onBackPressed();
-                }
-            }
-        });
-    }
-
-    public void onAddProfileImageClicked(View v) {
-        Intent intent = new Intent();
-        intent.setType("image/*");
-        intent.setAction(Intent.ACTION_GET_CONTENT);
-        startActivityForResult(Intent.createChooser(intent, "Select Image"), SELECT_IMAGE_CODE);
     }
 
     public void onRegisterClick(View view) {
@@ -192,74 +166,5 @@ public class RegistrationActivity extends AppCompatActivity {
                 });
 
         //Toast.makeText(RegistrationActivity.this, "Valid!", Toast.LENGTH_SHORT).show();
-    }
-
-    @Override
-    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
-        super.onActivityResult(requestCode, resultCode, data);
-
-        if(requestCode == SELECT_IMAGE_CODE) {
-            List<Fragment> fragmentList = getSupportFragmentManager().getFragments();
-
-            if (data != null) {
-                Toast.makeText(this, "Image Selected!", Toast.LENGTH_SHORT).show();
-                processSelectedImage(data.getData());
-            }
-            else {
-                Log.e("MakePostFragment", "Intent data is null");
-            }
-        }
-    }
-
-    public void processSelectedImage(Uri imgUri) {
-        ImageView iv = new ImageView(this);
-        iv.setImageURI(imgUri);
-
-        Bitmap bitmap = ((BitmapDrawable) iv.getDrawable()).getBitmap();
-        ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
-        bitmap.compress(Bitmap.CompressFormat.PNG, 100, byteArrayOutputStream);
-
-        mViewModel.uploadImage(byteArrayOutputStream.toByteArray());
-    }
-
-    class ProfileImage extends ViewModel {
-        FirebaseStorage firebaseStorage;
-        private MutableLiveData<Boolean> imageUploadedSuccessfully;
-        private WeakReference<Context> appContext;
-
-        public void init(Context context) {
-            appContext = new WeakReference<>(context);
-            firebaseStorage = FirebaseStorage.getInstance();
-            imageUploadedSuccessfully = new MutableLiveData<>(false);
-        }
-
-        public void uploadImage(byte[] imageBytes) {
-            StorageReference storageReference = firebaseStorage.getReference();
-
-            String fileName = UUID.randomUUID().toString();
-            final UploadTask uploadTask = storageReference.child("images/"+ fileName).putBytes(imageBytes);
-
-            uploadTask.addOnFailureListener(new OnFailureListener() {
-                @Override
-                public void onFailure(@NonNull Exception e) {
-                    Toast.makeText(appContext.get().getApplicationContext(), "Failed to upload image", Toast.LENGTH_SHORT).show();
-                }
-            }).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
-                @Override
-                public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
-                    Toast.makeText(appContext.get().getApplicationContext(), "Uploaded image successfully!", Toast.LENGTH_SHORT).show();
-                    profileImageLink = uploadTask.getResult().getUploadSessionUri();
-                    imageUploadedSuccessfully.setValue(true);
-                }
-            });
-        }
-
-        public MutableLiveData<Boolean> getImageUploadedSuccessfully() {
-            return imageUploadedSuccessfully;
-        }
-
-        public void setImageUploadedSuccessfully(MutableLiveData<Boolean> imageUploadedSuccessfully) {
-            this.imageUploadedSuccessfully = imageUploadedSuccessfully;
-        }
     }
 }

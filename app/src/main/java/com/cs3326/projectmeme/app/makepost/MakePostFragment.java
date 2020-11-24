@@ -83,11 +83,13 @@ public class MakePostFragment extends Fragment {
 
     public Post buildPostObj() {
         Post post = new Post();
-        Bitmap bitmap = ((BitmapDrawable) createPostImageView.getDrawable()).getBitmap();
-        ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
-        bitmap.compress(Bitmap.CompressFormat.PNG, 100, byteArrayOutputStream);
+        if (createPostImageView.getDrawable() != null) {
+            Bitmap bitmap = ((BitmapDrawable) createPostImageView.getDrawable()).getBitmap();
+            ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
+            bitmap.compress(Bitmap.CompressFormat.PNG, 100, byteArrayOutputStream);
 
-        post.setImageBytes(byteArrayOutputStream.toByteArray());
+            post.setImageBytes(byteArrayOutputStream.toByteArray());
+        }
         post.setTitle(editTextPostTitle.getText().toString());
         return post;
     }

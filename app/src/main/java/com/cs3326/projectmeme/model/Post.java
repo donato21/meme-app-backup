@@ -1,5 +1,7 @@
 package com.cs3326.projectmeme.model;
 
+import android.net.Uri;
+
 import com.google.firebase.firestore.DocumentId;
 
 import java.util.ArrayList;

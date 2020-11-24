@@ -155,8 +155,6 @@ public class TimelineFragment extends Fragment {// TODO: Implement adapter
                     .load(post.getImage())
                     .into(imageView);
 
-<<<<<<< HEAD
-=======
             if (post.getLikedBy() == null){
                 likedbyView.setText("0 likes");
 
@@ -193,7 +191,6 @@ public class TimelineFragment extends Fragment {// TODO: Implement adapter
                     doc.update(updates);
                 }
             });
->>>>>>> 0de764db2c5c39829e85b7da2d0e586a7316119e
         }
     }
 }
