@@ -102,6 +102,8 @@ public class TimelineFragment extends Fragment {// TODO: Implement adapter
         }
     }
 
+
+
     // Post mapping Boi
     private class ProductViewHolder extends RecyclerView.ViewHolder {
         private View view;

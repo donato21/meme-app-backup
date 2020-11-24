@@ -1,35 +1,66 @@
 package com.cs3326.projectmeme;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.app.ActivityCompat;
+import androidx.core.content.ContextCompat;
+import androidx.fragment.app.Fragment;
+import androidx.lifecycle.MutableLiveData;
+import androidx.lifecycle.Observer;
+import androidx.lifecycle.ViewModel;
+import androidx.lifecycle.ViewModelProvider;
 
+import android.Manifest;
+import android.content.Context;
 import android.content.Intent;
+import android.content.pm.PackageManager;
+import android.graphics.Bitmap;
+import android.graphics.drawable.BitmapDrawable;
+import android.media.Image;
+import android.net.Uri;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.Toast;
-import android.graphics.Bitmap;
-import android.graphics.drawable.BitmapDrawable;
-import android.net.Uri;
 
+import com.cs3326.projectmeme.app.makepost.MakePostFragment;
+import com.cs3326.projectmeme.model.Post;
 import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.auth.UserProfileChangeRequest;
+import com.google.firebase.storage.FirebaseStorage;
+import com.google.firebase.storage.StorageReference;
+import com.google.firebase.storage.UploadTask;
 
+import java.io.ByteArrayOutputStream;
+import java.lang.ref.WeakReference;
+import java.text.SimpleDateFormat;
+import java.util.Date;
+import java.util.List;
+import java.util.Locale;
+import java.util.UUID;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 public class RegistrationActivity extends AppCompatActivity {
     EditText displayNameEditText, emailEditText, passwordEditText, passwordConfirmEditText;
     private FirebaseAuth mAuth;
+    ProfileImage mViewModel;
+    public static final int SELECT_IMAGE_CODE = 11;
+    Uri profileImageLink;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
         setContentView(R.layout.activity_registration);
 
         mAuth = FirebaseAuth.getInstance();
@@ -38,6 +69,29 @@ public class RegistrationActivity extends AppCompatActivity {
         emailEditText = (EditText) findViewById(R.id.editTextEmail);
         passwordEditText = (EditText) findViewById(R.id.editTextPassword);
         passwordConfirmEditText = (EditText) findViewById(R.id.editTextPasswordConfirm);
+
+
+        mViewModel = new ProfileImage();
+        mViewModel.init(RegistrationActivity.this);
+        startImageUploadListener();
+    }
+
+    public void startImageUploadListener() {
+        mViewModel.getImageUploadedSuccessfully().observe(this, new Observer<Boolean>() {
+            @Override
+            public void onChanged(Boolean imageUploadedSuccessfully) {
+                if (imageUploadedSuccessfully) {
+                    onBackPressed();
+                }
+            }
+        });
+    }
+
+    public void onAddProfileImageClicked(View v) {
+        Intent intent = new Intent();
+        intent.setType("image/*");
+        intent.setAction(Intent.ACTION_GET_CONTENT);
+        startActivityForResult(Intent.createChooser(intent, "Select Image"), SELECT_IMAGE_CODE);
     }
 
     public void onRegisterClick(View view) {
@@ -92,6 +146,8 @@ public class RegistrationActivity extends AppCompatActivity {
             return;
         }
 
+
+
         mAuth.createUserWithEmailAndPassword(email, password)
                 .addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
                     @Override
@@ -136,5 +192,74 @@ public class RegistrationActivity extends AppCompatActivity {
                 });
 
         //Toast.makeText(RegistrationActivity.this, "Valid!", Toast.LENGTH_SHORT).show();
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+
+        if(requestCode == SELECT_IMAGE_CODE) {
+            List<Fragment> fragmentList = getSupportFragmentManager().getFragments();
+
+            if (data != null) {
+                Toast.makeText(this, "Image Selected!", Toast.LENGTH_SHORT).show();
+                processSelectedImage(data.getData());
+            }
+            else {
+                Log.e("MakePostFragment", "Intent data is null");
+            }
+        }
+    }
+
+    public void processSelectedImage(Uri imgUri) {
+        ImageView iv = new ImageView(this);
+        iv.setImageURI(imgUri);
+
+        Bitmap bitmap = ((BitmapDrawable) iv.getDrawable()).getBitmap();
+        ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
+        bitmap.compress(Bitmap.CompressFormat.PNG, 100, byteArrayOutputStream);
+
+        mViewModel.uploadImage(byteArrayOutputStream.toByteArray());
+    }
+
+    class ProfileImage extends ViewModel {
+        FirebaseStorage firebaseStorage;
+        private MutableLiveData<Boolean> imageUploadedSuccessfully;
+        private WeakReference<Context> appContext;
+
+        public void init(Context context) {
+            appContext = new WeakReference<>(context);
+            firebaseStorage = FirebaseStorage.getInstance();
+            imageUploadedSuccessfully = new MutableLiveData<>(false);
+        }
+
+        public void uploadImage(byte[] imageBytes) {
+            StorageReference storageReference = firebaseStorage.getReference();
+
+            String fileName = UUID.randomUUID().toString();
+            final UploadTask uploadTask = storageReference.child("images/"+ fileName).putBytes(imageBytes);
+
+            uploadTask.addOnFailureListener(new OnFailureListener() {
+                @Override
+                public void onFailure(@NonNull Exception e) {
+                    Toast.makeText(appContext.get().getApplicationContext(), "Failed to upload image", Toast.LENGTH_SHORT).show();
+                }
+            }).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
+                @Override
+                public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
+                    Toast.makeText(appContext.get().getApplicationContext(), "Uploaded image successfully!", Toast.LENGTH_SHORT).show();
+                    profileImageLink = uploadTask.getResult().getUploadSessionUri();
+                    imageUploadedSuccessfully.setValue(true);
+                }
+            });
+        }
+
+        public MutableLiveData<Boolean> getImageUploadedSuccessfully() {
+            return imageUploadedSuccessfully;
+        }
+
+        public void setImageUploadedSuccessfully(MutableLiveData<Boolean> imageUploadedSuccessfully) {
+            this.imageUploadedSuccessfully = imageUploadedSuccessfully;
+        }
     }
 }
