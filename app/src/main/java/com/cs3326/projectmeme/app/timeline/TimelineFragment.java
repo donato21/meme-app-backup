@@ -127,6 +127,7 @@ public class TimelineFragment extends Fragment {// TODO: Implement adapter
             Glide.with(imageView.getContext())
                     .load(post.getImage())
                     .into(imageView);
+
         }
     }
 }

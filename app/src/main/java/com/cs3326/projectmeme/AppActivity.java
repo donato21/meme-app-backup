@@ -1,6 +1,5 @@
 package com.cs3326.projectmeme;
 
-import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
@@ -8,18 +7,14 @@ import androidx.fragment.app.Fragment;
 import android.content.Intent;
 import android.os.Bundle;
 
-import android.view.LayoutInflater;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.FrameLayout;
 
-import android.widget.ImageView;
-import android.widget.TextView;
 import android.widget.Toast;
 
-import com.bumptech.glide.Glide;
 import com.cs3326.projectmeme.app.makepost.MakePostFragment;
 import com.cs3326.projectmeme.app.profile.ProfileFragment;
 import com.cs3326.projectmeme.app.timeline.TimelineFragment;
