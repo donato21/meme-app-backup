@@ -149,7 +149,6 @@ public class TimelineFragment extends Fragment {// TODO: Implement adapter
 
             postedbyView.setText(post.getPostedBy());
             textView.setText(post.getText());
-            //imageView.setImageURI(Uri.parse(post.getImage()));
             Glide.with(imageView.getContext())
                     .load(post.getImage())
                     .into(imageView);
