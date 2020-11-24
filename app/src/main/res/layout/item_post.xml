@@ -102,13 +102,18 @@
     <ImageView
         android:id="@+id/post_item_image"
         android:layout_width="0dp"
-        android:layout_height="wrap_content"
+        android:layout_height="300dp"
         android:layout_marginBottom="10dp"
+        android:adjustViewBounds="false"
         android:background="#5C5F77"
-        android:scaleType="fitStart"
+        android:cropToPadding="false"
+        android:elevation="0dp"
+        android:foregroundGravity="center_horizontal"
+        android:scaleType="fitCenter"
         app:layout_constraintBottom_toTopOf="@+id/imageButtonLike"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent" />
+        app:layout_constraintStart_toStartOf="parent"
+        app:srcCompat="@drawable/asset_5" />
 
     <ImageButton
         android:id="@+id/imageButtonLike"
@@ -127,8 +132,8 @@
         android:tint="#5C5F77"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:srcCompat="@drawable/heart_unliked"
-        tools:srcCompat="@drawable/heart_unliked" />
+        app:srcCompat="@drawable/heart_liked"
+        tools:srcCompat="@drawable/heart_liked" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
 
