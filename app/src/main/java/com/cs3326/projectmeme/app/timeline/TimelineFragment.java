@@ -3,7 +3,6 @@ package com.cs3326.projectmeme.app.timeline;
 import androidx.lifecycle.ViewModelProviders;
 
 import android.graphics.Color;
-import android.media.Image;
 import android.net.Uri;
 import android.os.Bundle;
 
@@ -13,9 +12,9 @@ import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.view.ViewDebug;
 import android.view.ViewGroup;
 import android.widget.ImageButton;
 import android.widget.ImageView;
@@ -27,8 +26,6 @@ import com.cs3326.projectmeme.R;
 import com.cs3326.projectmeme.model.Post;
 import com.firebase.ui.firestore.FirestoreRecyclerAdapter;
 import com.firebase.ui.firestore.FirestoreRecyclerOptions;
-import com.google.android.gms.tasks.Task;
-import com.google.common.base.Joiner;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.DocumentReference;
@@ -36,10 +33,7 @@ import com.google.firebase.firestore.FieldValue;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.Query;
 
-import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
 public class TimelineFragment extends Fragment {// TODO: Implement adapter
@@ -64,7 +58,7 @@ public class TimelineFragment extends Fragment {// TODO: Implement adapter
         // Query init for Adapter
         mQuery = FirebaseFirestore.getInstance()
                 .collection("posts")
-                .orderBy("postedBy")
+                .orderBy("created")
                 .limit(50);
 
         // Options init for Adapter
@@ -123,11 +117,14 @@ public class TimelineFragment extends Fragment {// TODO: Implement adapter
         }
     }
 
+
+
     // Post mapping Boi
     private class ProductViewHolder extends RecyclerView.ViewHolder {
         private View view;
         TextView titleView;
         ImageView imageView;
+        ImageView profileView;
         TextView likedbyView;
         TextView textView;
         TextView postedbyView;
@@ -138,6 +135,7 @@ public class TimelineFragment extends Fragment {// TODO: Implement adapter
             super(itemView);
             view = itemView;
             imageView = itemView.findViewById(R.id.post_item_image);
+            profileView = itemView.findViewById(R.id.image_view_profile);
             titleView = itemView.findViewById(R.id.post_item_title);
             likedbyView = itemView.findViewById(R.id.post_item_likedby);
             textView = itemView.findViewById(R.id.post_item_text);
@@ -152,12 +150,20 @@ public class TimelineFragment extends Fragment {// TODO: Implement adapter
             Glide.with(imageView.getContext())
                     .load(post.getImage())
                     .into(imageView);
+            Glide.with(profileView.getContext())
+                    .load(post.getProfileImage())
+                    .into(profileView);
 
             if (post.getLikedBy() == null){
-                likedbyView.setText("0 likes");
+                likedbyView.setText("");
 
             } else {
-                likedbyView.setText(post.getLikedBy().size() + " likes");
+                if (post.getLikedBy().size() < 1) {
+                    likedbyView.setText("");
+                }
+                else {
+                    likedbyView.setText(String.valueOf(post.getLikedBy().size()));
+                }
 
                 if(post.getLikedBy().contains(user.getUid())){
                     likeButton.setImageResource(R.drawable.heart_liked);

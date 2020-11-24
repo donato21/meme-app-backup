@@ -1,6 +1,5 @@
 package com.cs3326.projectmeme;
 
-import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
@@ -8,15 +7,12 @@ import androidx.fragment.app.Fragment;
 import android.content.Intent;
 import android.os.Bundle;
 
-import android.view.LayoutInflater;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.FrameLayout;
 
-import android.widget.ImageView;
-import android.widget.TextView;
 import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
@@ -30,9 +26,9 @@ import java.util.List;
 
 public class AppActivity extends AppCompatActivity {
 
-    private FirebaseAuth mAuth;
+    public FirebaseAuth mAuth;
     private FirebaseUser currentUser;
-    Menu menu;
+    public Menu menu;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -86,9 +82,13 @@ public class AppActivity extends AppCompatActivity {
         }
 
         public void updateProfileUI() {
-            setTitle("");
+            setTitle("Profile");
             menu.findItem(R.id.miProfile).setVisible(false);
             ProfileFragment pf = (ProfileFragment) getSupportFragmentManager().findFragmentById(R.id.app_fragment_container);
+            pf.profileImageView.setImageURI(currentUser.getPhotoUrl());
+            Glide.with(pf.profileImageView.getContext())
+                    .load(currentUser.getPhotoUrl())
+                    .into(pf.profileImageView);
             pf.displayNameTextView.setText(currentUser.getDisplayName());
             pf.emailTextView.setText(currentUser.getEmail());
         }
@@ -102,6 +102,13 @@ public class AppActivity extends AppCompatActivity {
             mAuth.signOut();
             Intent intent = new Intent(this, LoginActivity.class);
             startActivity(intent);
+        }
+
+        public void onAddProfileImageClicked(View v) {
+            Intent intent = new Intent();
+            intent.setType("image/*");
+            intent.setAction(Intent.ACTION_GET_CONTENT);
+            startActivityForResult(Intent.createChooser(intent, "Select Image"), ProfileFragment.SELECT_IMAGE_CODE);
         }
 
     //Fragment Functions
@@ -127,6 +134,25 @@ public class AppActivity extends AppCompatActivity {
     @Override
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
+
+        if(requestCode == ProfileFragment.SELECT_IMAGE_CODE) {
+            List<Fragment> fragmentList = getSupportFragmentManager().getFragments();
+
+
+            for(Fragment fragment : fragmentList) {
+                if(fragment instanceof ProfileFragment) {
+                    ProfileFragment profileFragment = (ProfileFragment) fragment;
+                    if(data != null) {
+                        Toast.makeText(this, "Image Selected!", Toast.LENGTH_SHORT).show();
+                        profileFragment.processSelectedImage(data.getData());
+                    }
+                    else {
+                        Log.e("MakePostFragment", "Intent data is null");
+                    }
+                    break;
+                }
+            }
+        }
 
         if(requestCode == MakePostFragment.SELECT_IMAGE_CODE) {
             /*MakePostFragment makePostFragment = (MakePostFragment) getSupportFragmentManager().findFragmentByTag("MakePostFragment");
