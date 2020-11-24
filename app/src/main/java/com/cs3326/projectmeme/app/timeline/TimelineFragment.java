@@ -7,15 +7,30 @@ import android.os.Bundle;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
+import android.widget.TextView;
 
+import com.bumptech.glide.Glide;
 import com.cs3326.projectmeme.AppActivity;
 import com.cs3326.projectmeme.R;
+import com.cs3326.projectmeme.model.Post;
+import com.firebase.ui.firestore.FirestoreRecyclerAdapter;
+import com.firebase.ui.firestore.FirestoreRecyclerOptions;
+import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.Query;
 
-public class TimelineFragment extends Fragment {
+public class TimelineFragment extends Fragment {// TODO: Implement adapter
+    private Query mQuery;
+    private FirestoreRecyclerOptions<Post> mOptions;
+    private FirestoreRecyclerAdapter<Post, TimelineFragment.ProductViewHolder> mAdapter;
+    private RecyclerView mPostsRecyclerView;
+    private LinearLayoutManager mLayoutManager;
 
     private TimelineViewModel mViewModel;
     public static TimelineFragment newInstance() {
@@ -25,13 +40,35 @@ public class TimelineFragment extends Fragment {
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container,
                              @Nullable Bundle savedInstanceState) {
-        return inflater.inflate(R.layout.timeline_fragment, container, false);
-    }
+        // Query init for Adapter
+        mQuery = FirebaseFirestore.getInstance()
+                .collection("posts")
+                .orderBy("postedBy")
+                .limit(50);
 
-    @Override
-    public void onStart() {
-        super.onStart();
-        ((AppActivity)getActivity()).updateTimelineUI();
+        // Options init for Adapter
+        mOptions = new FirestoreRecyclerOptions.Builder<Post>()
+                .setQuery(mQuery, Post.class)
+                .build();
+
+        // Init adapter, sets up mapping
+        mAdapter = new FirestoreRecyclerAdapter<Post, TimelineFragment.ProductViewHolder>(mOptions) {
+            @Override
+            protected void onBindViewHolder(@NonNull TimelineFragment.ProductViewHolder holder, int position, @NonNull Post post) {
+                holder.bind(post);
+            }
+
+            @NonNull
+            @Override
+            public TimelineFragment.ProductViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
+                View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_post, parent, false);
+                return new TimelineFragment.ProductViewHolder(view);
+            }
+        };
+
+        mLayoutManager = new LinearLayoutManager(((AppActivity)getActivity()));
+
+        return inflater.inflate(R.layout.timeline_fragment, container, false);
     }
 
     @Override
@@ -41,4 +78,55 @@ public class TimelineFragment extends Fragment {
         // TODO: Use the ViewModel
     }
 
+    // Listeners for the Adapter
+    @Override
+    public void onStart() {
+        super.onStart();
+        // Update UI
+        ((AppActivity)getActivity()).updateTimelineUI();
+
+        // Update view on fragment load
+        mPostsRecyclerView = getView().findViewById(R.id.recycler_view);
+        mPostsRecyclerView.setLayoutManager(mLayoutManager);
+        mPostsRecyclerView.setAdapter(mAdapter);
+
+        mAdapter.startListening();
+    }
+
+    @Override
+    public void onStop() {
+        super.onStop();
+
+        if (mAdapter != null) {
+            mAdapter.stopListening();
+        }
+    }
+
+    // Post mapping Boi
+    private class ProductViewHolder extends RecyclerView.ViewHolder {
+        private View view;
+        TextView titleView;
+        ImageView imageView;
+        TextView likedbyView;
+        TextView textView;
+        TextView postedbyView;
+
+        ProductViewHolder(View itemView) {
+            super(itemView);
+            view = itemView;
+            imageView = itemView.findViewById(R.id.post_item_image);
+            titleView = itemView.findViewById(R.id.post_item_title);
+            likedbyView = itemView.findViewById(R.id.post_item_likedby);
+            textView = itemView.findViewById(R.id.post_item_text);
+            postedbyView = itemView.findViewById(R.id.post_item_postedby);
+        }
+
+        void bind(Post post) {
+            postedbyView.setText(post.getPostedBy());
+            textView.setText(post.getText());
+            Glide.with(imageView.getContext())
+                    .load(post.getImage())
+                    .into(imageView);
+        }
+    }
 }

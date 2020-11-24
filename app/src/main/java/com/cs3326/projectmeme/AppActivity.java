@@ -4,18 +4,17 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
-import androidx.recyclerview.widget.LinearLayoutManager;
-import androidx.recyclerview.widget.RecyclerView;
 
 import android.content.Intent;
 import android.os.Bundle;
+
 import android.view.LayoutInflater;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.view.ViewGroup;
 import android.widget.FrameLayout;
+
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -24,29 +23,15 @@ import com.bumptech.glide.Glide;
 import com.cs3326.projectmeme.app.makepost.MakePostFragment;
 import com.cs3326.projectmeme.app.profile.ProfileFragment;
 import com.cs3326.projectmeme.app.timeline.TimelineFragment;
-import com.cs3326.projectmeme.model.Post;
-import com.firebase.ui.firestore.FirestoreRecyclerAdapter;
-import com.firebase.ui.firestore.FirestoreRecyclerOptions;
-import com.google.firebase.FirebaseApp;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
-import com.google.firebase.firestore.DocumentSnapshot;
-import com.google.firebase.firestore.FirebaseFirestore;
-import com.google.firebase.firestore.Query;
 
 import java.util.List;
 
 public class AppActivity extends AppCompatActivity {
 
-    // TODO: Implement adapter
-    private RecyclerView mPostsRecyclerView;
-    private Query mQuery;
-    private FirestoreRecyclerAdapter<Post, ProductViewHolder> mAdapter;
-//    private PostAdapter mAdapter;
-    private ViewGroup mEmptyView;
     private FirebaseAuth mAuth;
     private FirebaseUser currentUser;
-    private FirebaseApp fbApp;
     Menu menu;
 
     @Override
@@ -57,32 +42,6 @@ public class AppActivity extends AppCompatActivity {
 
         mAuth = FirebaseAuth.getInstance();
         currentUser = mAuth.getCurrentUser();
-
-        // Query init for Adapter
-        mQuery = FirebaseFirestore.getInstance()
-                .collection("posts")
-                .orderBy("postedBy")
-                .limit(50);
-
-        // Options init for Adapter
-        FirestoreRecyclerOptions<Post> options = new FirestoreRecyclerOptions.Builder<Post>()
-                .setQuery(mQuery, Post.class)
-                .build();
-
-        // Init adapter, sets up mapping
-        mAdapter = new FirestoreRecyclerAdapter<Post, ProductViewHolder>(options) {
-            @Override
-            protected void onBindViewHolder(@NonNull ProductViewHolder holder, int position, @NonNull Post post) {
-                holder.bind(post);
-            }
-
-            @NonNull
-            @Override
-            public ProductViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-                View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_post, parent, false);
-                return new ProductViewHolder(view);
-            }
-        };
 
         // Check user logged in
         if (currentUser == null){
@@ -110,18 +69,15 @@ public class AppActivity extends AppCompatActivity {
             changeToFragment(new TimelineFragment());
         }
 
-        public void onToTimelineClicked(View view) {
-            changeToTimelineFragment();
-        }
-
         public void updateTimelineUI() {
+            setTitle("Explore");
             // Enable profile icon
             menu.findItem(R.id.miProfile).setVisible(true);
+        }
 
-            // Update view on fragment load
-            mPostsRecyclerView = findViewById(R.id.recycler_view);
-            mPostsRecyclerView.setLayoutManager(new LinearLayoutManager(this));
-            mPostsRecyclerView.setAdapter(mAdapter);
+        // Buttons
+        public void onToTimelineClicked(View view) {
+            changeToTimelineFragment();
         }
 
     //Profile Functions
@@ -129,15 +85,17 @@ public class AppActivity extends AppCompatActivity {
             changeToFragment(new ProfileFragment());
         }
 
-        public void onToProfileClicked(MenuItem mi) {
-            changeToProfileFragment();
-        }
-
         public void updateProfileUI() {
+            setTitle("");
             menu.findItem(R.id.miProfile).setVisible(false);
             ProfileFragment pf = (ProfileFragment) getSupportFragmentManager().findFragmentById(R.id.app_fragment_container);
             pf.displayNameTextView.setText(currentUser.getDisplayName());
             pf.emailTextView.setText(currentUser.getEmail());
+        }
+
+        // Buttons
+        public void onToProfileClicked(MenuItem mi) {
+            changeToProfileFragment();
         }
 
         public void onSignOutClick(View view){
@@ -154,51 +112,6 @@ public class AppActivity extends AppCompatActivity {
                         .addToBackStack(null)
                         .commit();
         }
-
-        // Post mapping Boi
-        private class ProductViewHolder extends RecyclerView.ViewHolder {
-            private View view;
-            TextView titleView;
-            ImageView imageView;
-            TextView likedbyView;
-            TextView textView;
-            TextView postedbyView;
-
-            ProductViewHolder(View itemView) {
-                super(itemView);
-                view = itemView;
-                imageView = itemView.findViewById(R.id.post_item_image);
-                titleView = itemView.findViewById(R.id.post_item_title);
-                likedbyView = itemView.findViewById(R.id.post_item_likedby);
-                textView = itemView.findViewById(R.id.post_item_text);
-                postedbyView = itemView.findViewById(R.id.post_item_postedby);
-            }
-
-            void bind(Post post) {
-                postedbyView.setText(post.getPostedBy());
-                textView.setText(post.getText());
-                Glide.with(imageView.getContext())
-                        .load(post.getImage())
-                        .into(imageView);
-            }
-        }
-
-    // Listeners for the Adapter
-    @Override
-    protected void onStart() {
-        super.onStart();
-        mAdapter.startListening();
-    }
-
-    @Override
-    protected void onStop() {
-        super.onStop();
-
-        if (mAdapter != null) {
-            mAdapter.stopListening();
-        }
-    }
-
 
     public void onFabCreatePostClick(View view) {
         FrameLayout contentView = (FrameLayout) findViewById(R.id.app_fragment_container);
