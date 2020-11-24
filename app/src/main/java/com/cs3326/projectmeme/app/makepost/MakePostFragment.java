@@ -12,12 +12,14 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 
+import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.cs3326.projectmeme.R;
 
@@ -57,7 +59,15 @@ public class MakePostFragment extends Fragment {
         addPostButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                mViewModel.saveAndUploadPost();
+                if(TextUtils.isEmpty(editTextPostTitle.getText())){
+                    Toast.makeText(getActivity(), "You did not enter a title", Toast.LENGTH_SHORT).show();
+                }
+                else if(createPostImageView.getDrawable()  == null){
+                    Toast.makeText(getActivity(), "You did not select an image", Toast.LENGTH_SHORT).show();
+                }
+                else{
+                    mViewModel.saveAndUploadPost();
+                }
             }
         });
 
