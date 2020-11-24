@@ -1,12 +1,7 @@
 package com.cs3326.projectmeme.model;
 
-import android.net.Uri;
-
+import com.google.firebase.Timestamp;
 import com.google.firebase.firestore.DocumentId;
-
-import java.util.ArrayList;
-import java.util.List;
-
 import java.util.List;
 
 public class Post {
@@ -16,23 +11,17 @@ public class Post {
 
     private String image;
     private byte[] imageBytes;
+    private String profileImage;
     private List<String> likedBy;
     private String text;
     private static String postedBy;
+    private static Timestamp created;
+    private static String userId;
 
     @DocumentId
     private String documentId;
 
     public Post(){}
-
-    public Post (byte[] imageBytes, String image, List<String> likedBy, String text, String postedBy, String documentId) {
-        this.image = image;
-        this.likedBy = likedBy;
-        this.text = text;
-        this.postedBy = postedBy;
-        this.documentId = documentId;
-        this.imageBytes = imageBytes;
-    }
 
     //Getter's and Setter's
     public String getDocumentId() {return documentId; }
@@ -55,6 +44,10 @@ public class Post {
         this.image = image;
     }
 
+    public String getProfileImage() { return profileImage; }
+
+    public void setProfileImage(String profileImage) {  this.profileImage = profileImage; }
+
     public List<String> getLikedBy() { return likedBy; }
 
     public void setLikedBy(List<String> likedBy) { this.likedBy = likedBy; }
@@ -66,6 +59,14 @@ public class Post {
     public String getPostedBy() { return postedBy; }
 
     public void setPostedBy(String postedBy) { Post.postedBy = postedBy; }
+
+    public Timestamp getCreated() { return created; }
+
+    public void setCreated(Timestamp date) { created = date; }
+
+    public String getUserId() { return userId; }
+
+    public void setUserId(String userId) { this.userId = userId; }
 
 }
 

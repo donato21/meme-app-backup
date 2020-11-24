@@ -21,6 +21,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.cs3326.projectmeme.AppActivity;
 import com.cs3326.projectmeme.R;
 
 
@@ -77,6 +78,9 @@ public class MakePostFragment extends Fragment {
     @Override
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
+        AppActivity aa = ((AppActivity)getActivity());
+        aa.setTitle("Create your post!");
+        aa.menu.findItem(R.id.miProfile).setVisible(false);
         mViewModel = new ViewModelProvider(this, new ViewModelProvider.NewInstanceFactory()).get(MakePostViewModel.class);
         mViewModel.init(this);
         initObservableMethods();

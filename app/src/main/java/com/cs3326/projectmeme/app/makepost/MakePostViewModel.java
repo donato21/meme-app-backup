@@ -1,6 +1,6 @@
 package com.cs3326.projectmeme.app.makepost;
 
-import android.content.Context;
+
 import android.graphics.Bitmap;
 import android.graphics.drawable.BitmapDrawable;
 import android.net.Uri;
@@ -17,6 +17,7 @@ import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
+import com.google.firebase.Timestamp;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.FirebaseFirestore;
@@ -83,7 +84,10 @@ public class MakePostViewModel extends ViewModel {
         MakePostFragment makePostFragment = appContext.get();
         Post post = new Post();
         post.setPostedBy(FirebaseAuth.getInstance().getCurrentUser().getDisplayName());
+        post.setProfileImage(FirebaseAuth.getInstance().getCurrentUser().getPhotoUrl().toString());
         post.setText(makePostFragment.getEditTextPostTitle().getText().toString());
+        post.setCreated(Timestamp.now());
+        post.setUserId(FirebaseAuth.getInstance().getCurrentUser().getUid());
 
         return post;
     }

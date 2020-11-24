@@ -15,6 +15,7 @@ import android.widget.FrameLayout;
 
 import android.widget.Toast;
 
+import com.bumptech.glide.Glide;
 import com.cs3326.projectmeme.app.makepost.MakePostFragment;
 import com.cs3326.projectmeme.app.profile.ProfileFragment;
 import com.cs3326.projectmeme.app.timeline.TimelineFragment;
@@ -27,7 +28,7 @@ public class AppActivity extends AppCompatActivity {
 
     public FirebaseAuth mAuth;
     private FirebaseUser currentUser;
-    Menu menu;
+    public Menu menu;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -85,6 +86,9 @@ public class AppActivity extends AppCompatActivity {
             menu.findItem(R.id.miProfile).setVisible(false);
             ProfileFragment pf = (ProfileFragment) getSupportFragmentManager().findFragmentById(R.id.app_fragment_container);
             pf.profileImageView.setImageURI(currentUser.getPhotoUrl());
+            Glide.with(pf.profileImageView.getContext())
+                    .load(currentUser.getPhotoUrl())
+                    .into(pf.profileImageView);
             pf.displayNameTextView.setText(currentUser.getDisplayName());
             pf.emailTextView.setText(currentUser.getEmail());
         }

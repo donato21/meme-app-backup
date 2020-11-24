@@ -58,7 +58,7 @@ public class ProfileFragment extends Fragment {
     {
         View RootView = inflater.inflate(R.layout.profile_fragment, container, false);
 
-        profileImageView = (ImageView) RootView.findViewById(R.id.imageViewProfile);
+        profileImageView = (ImageView) RootView.findViewById(R.id.image_view_profile);
         displayNameTextView = (TextView) RootView.findViewById(R.id.textViewDisplayName);
         emailTextView = (TextView) RootView.findViewById(R.id.textViewEmail);
 
