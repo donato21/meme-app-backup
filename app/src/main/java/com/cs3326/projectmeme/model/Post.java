@@ -1,5 +1,7 @@
 package com.cs3326.projectmeme.model;
 
+import com.google.firebase.firestore.DocumentId;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -18,18 +20,27 @@ public class Post {
     private String text;
     private static String postedBy;
 
+    @DocumentId
+    private String documentId;
+
     public Post(){}
 
-    public Post(String title, byte[] imageBytes, List<String> likedBy, String text, String postedBy) {
+    public Post(String title, byte[] imageBytes, List<String> likedBy, String text, String postedBy, String documentId) {
         this.title = title;
         this.image = image;
         this.imageBytes = imageBytes;
         this.likedBy = likedBy;
         this.text = text;
         this.postedBy = postedBy;
+        this.documentId = documentId;
     }
 
     //Getter's and Setter's
+    public String getDocumentId() {return documentId; }
+
+    public void setDocumentId(String documentId){ this.documentId = documentId; }
+
+
     public String getTitle() { return title; }
 
     public void setTitle(String title) { this.title = title; }
