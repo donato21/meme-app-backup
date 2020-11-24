@@ -92,6 +92,7 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:layout_gravity="center"
+            android:foregroundGravity="center_horizontal"
             android:scaleType="centerCrop"
             app:srcCompat="@drawable/no_profile"
             tools:srcCompat="@drawable/no_profile" />
