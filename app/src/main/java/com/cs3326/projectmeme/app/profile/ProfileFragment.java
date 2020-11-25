@@ -76,7 +76,7 @@ public class ProfileFragment extends Fragment {
         super.onActivityCreated(savedInstanceState);
         mViewModel = ViewModelProviders.of(this).get(ProfileViewModel.class);
 
-        // Upload Image
+        // Upload Image Logic
         iViewModel = new ProfileImage();
         iViewModel.init(getContext());
         startImageUploadListener();
