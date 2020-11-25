@@ -23,6 +23,7 @@ import android.widget.TextView;
 import com.bumptech.glide.Glide;
 import com.cs3326.projectmeme.AppActivity;
 import com.cs3326.projectmeme.R;
+import com.cs3326.projectmeme.app.viewpost.ViewPostFragment;
 import com.cs3326.projectmeme.model.Post;
 import com.firebase.ui.firestore.FirestoreRecyclerAdapter;
 import com.firebase.ui.firestore.FirestoreRecyclerOptions;
@@ -42,11 +43,10 @@ public class TimelineFragment extends Fragment {// TODO: Implement adapter
     private FirestoreRecyclerAdapter<Post, TimelineFragment.ProductViewHolder> mAdapter;
     private RecyclerView mPostsRecyclerView;
     private LinearLayoutManager mLayoutManager;
-
     FirebaseUser user;
 
-
     private TimelineViewModel mViewModel;
+
     public static TimelineFragment newInstance() {
         return new TimelineFragment();
     }
@@ -156,7 +156,8 @@ public class TimelineFragment extends Fragment {// TODO: Implement adapter
 
             if (post.getLikedBy() == null){
                 likedbyView.setText("");
-
+                likeButton.setColorFilter(Color.argb(255, 100, 100, 100));
+                likeButton.setImageResource(R.drawable.heart_unliked);
             } else {
                 if (post.getLikedBy().size() < 1) {
                     likedbyView.setText("");
@@ -175,6 +176,7 @@ public class TimelineFragment extends Fragment {// TODO: Implement adapter
                 }
             }
 
+            // Update like button on click
             likeButton.setOnClickListener(new ImageButton.OnClickListener(){
                 @Override
                 public void onClick(View view) {
@@ -193,6 +195,16 @@ public class TimelineFragment extends Fragment {// TODO: Implement adapter
 
                     // Push Updates
                     doc.update(updates);
+                }
+            });
+
+            // Change to viewpost on click, push data
+            view.setOnClickListener( new View.OnClickListener(){
+
+                @Override
+                public void onClick(View view) {
+                    ViewPostFragment.init(post);
+                    ((AppActivity)getActivity()).changeToFragment(new ViewPostFragment());
                 }
             });
         }

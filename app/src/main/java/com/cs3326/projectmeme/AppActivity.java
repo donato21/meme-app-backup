@@ -112,7 +112,7 @@ public class AppActivity extends AppCompatActivity {
         }
 
     //Fragment Functions
-        private void changeToFragment(Fragment fragment){
+        public void changeToFragment(Fragment fragment){
             FrameLayout contentView = (FrameLayout) findViewById(R.id.app_fragment_container);
             getSupportFragmentManager().beginTransaction()
                         .replace(contentView.getId(), fragment)
