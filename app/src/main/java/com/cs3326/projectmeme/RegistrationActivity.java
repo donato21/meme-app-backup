@@ -93,7 +93,7 @@ public class RegistrationActivity extends AppCompatActivity {
 
         // DisplayName Regex
         // 3-16 char | alphanumeric _ -
-        Pattern displayNameRegex = Pattern.compile("^[a-z0-9_-]{3,16}$");
+        Pattern displayNameRegex = Pattern.compile("^[a-zA-Z0-9_-]{3,16}$");
         Matcher mDisplayName = displayNameRegex.matcher(displayName);
 
         // if displayName is invalid
