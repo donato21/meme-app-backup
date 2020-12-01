@@ -58,7 +58,7 @@ public class TimelineFragment extends Fragment {// TODO: Implement adapter
         // Query init for Adapter
         mQuery = FirebaseFirestore.getInstance()
                 .collection("posts")
-                .orderBy("created")
+                .orderBy("created",Query.Direction.DESCENDING)
                 .limit(50);
 
         // Options init for Adapter
@@ -203,6 +203,7 @@ public class TimelineFragment extends Fragment {// TODO: Implement adapter
 
                 @Override
                 public void onClick(View view) {
+                    
                     ViewPostFragment.init(post);
                     ((AppActivity)getActivity()).changeToFragment(new ViewPostFragment());
                 }

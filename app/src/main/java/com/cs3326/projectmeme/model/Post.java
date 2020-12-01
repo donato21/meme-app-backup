@@ -10,7 +10,6 @@ public class Post {
     public static final String FIELD_TEXT = "text";
 
     private String image;
-    private byte[] imageBytes;
     private String profileImage;
     private List<String> likedBy;
     private String text;
@@ -27,14 +26,6 @@ public class Post {
     public String getDocumentId() {return documentId; }
 
     public void setDocumentId(String documentId){ this.documentId = documentId; }
-
-    public byte[] getImageBytes() {
-        return imageBytes;
-    }
-
-    public void setImageBytes(byte[] imageBytes) {
-        this.imageBytes = imageBytes;
-    }
 
     public String getImage() {
         return image;
@@ -67,6 +58,8 @@ public class Post {
     public String getUserId() { return userId; }
 
     public void setUserId(String userId) { this.userId = userId; }
+
+    public void print() { System.out.println("\n"+documentId+"\nPostedby: "+postedBy+"\nText: "+text+"\nLikedBy: "+likedBy.toString()); }
 
 }
 
